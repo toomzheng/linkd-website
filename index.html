@@ -24,16 +24,16 @@
         <main>
             <h1>Hey! Welcome to Linkd.</h1>
             <p class="date">February 27, 2025</p>
-            <p class="announcement"><em>update: we are backed by <span class="highlight-yc"><a href="https://www.ycombinator.com/" target="_blank" rel="noopener noreferrer">Y Combinator</a></span> as a part of their X25 batch.</em></p>
+            <p class="announcement"><em>update: we are backed by <span class="highlight-yc"><a href="https://www.ycombinator.com/" target="_blank" rel="noopener noreferrer"><u>Y Combinator</u></a></span> as a part of their X25 batch.</em></p>
             <h2>How do you discover people?</h2>
             
             <p>We're here to find out.</p>
             
-            <p>Our team building the world's first search algorithm designed around human interactions. Social networks should be centered on ourexperiences.</p>
+            <p>Our team building the world's first search algorithm designed around human interactions. Social networks should be centered on our <em>experiences</em>.</p>
             
             <p>It's called <b>Linkd.</b></p>
 
-            <p class="announcement"><em>If you're a <u>company</u> interested in people search for recruiting, teams, or leads, please directly contact us below.</em></p>
+            <p class="announcement"><em>> If you're a <u>company</u> interested in people search for recruiting, teams, or leads, please directly contact us below.</em></p>
             
             <!-- <p>We're designing a lean team of ambitious engineers who love the idea of redefining interation between people and information.</p>
             
@@ -228,18 +228,9 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    // Removed confirmation email code
-                    
-                    // Customize success message if email was modified
-                    if (result.modified) {
-                        formMessage.textContent = `Thanks! We've registered you with ${result.email}. We'll be in touch when we launch at your school.`;
-                    } else {
-                        formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school.';
-                    }
-                    
-                    // Removed email failure handling
-
-                    formMessage.className = 'success';
+                    // Customize success message
+                    formMessage.textContent = `Thanks! You've registered with ${email}. We'll be in touch to launch at ${school}.`;
+                    formMessage.className = 'form-message success';
                     document.getElementById('signupForm').reset();
                 } else {
                     /*** ERROR HANDLING - SERVER RESPONSE ERROR ***/
