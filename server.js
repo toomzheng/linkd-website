@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
+const { Resend } = require('resend');
 const app = express();
 let PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 3000) : 3001;
 
@@ -10,6 +11,9 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
+
+// Initialize Resend email client
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Setup middleware
 app.use(express.json());
@@ -53,7 +57,7 @@ app.get('/api/config', (req, res) => {
 
 // Create waitlist endpoint for collecting emails
 app.post('/api/waitlist', async (req, res) => {
-  const { email, name, school } = req.body;
+  const { email, name, school, linkedin } = req.body;
 
   // Validate input
   if (!email) {
@@ -117,6 +121,134 @@ app.post('/api/waitlist', async (req, res) => {
       return res.status(500).json({ error: 'Failed to register email' });
     }
 
+    // Send confirmation email via Resend
+    try {
+      const userName = name || 'there';
+      const userEmail = baseEmail; // Use the original email without any suffix
+      const schoolName = school || 'your school';
+      
+      // Create HTML email content
+      const emailHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Welcome to Linkd Waitlist</title>
+          <style>
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+              line-height: 1.5;
+              color: #333;
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #f9f9f9;
+            }
+            .container {
+              background-color: #ffffff;
+              border-radius: 8px;
+              padding: 30px;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            }
+            .header {
+              margin-bottom: 25px;
+              text-align: center;
+            }
+            .footer {
+              margin-top: 30px;
+              font-size: 12px;
+              color: #666;
+              text-align: center;
+              padding-top: 15px;
+              border-top: 1px solid #eeeeee;
+            }
+            h1 {
+              color: #000;
+              font-size: 24px;
+              margin-bottom: 15px;
+            }
+            p {
+              margin-bottom: 15px;
+            }
+            .highlight {
+              color: #FF6601;
+              font-weight: bold;
+            }
+            .button {
+              display: inline-block;
+              background-color: #FF6601;
+              color: white;
+              text-decoration: none;
+              padding: 10px 20px;
+              border-radius: 5px;
+              font-weight: bold;
+              margin: 15px 0;
+            }
+            .schools {
+              text-align: center;
+              margin: 20px 0;
+              padding: 15px;
+              background-color: #f5f5f5;
+              border-radius: 5px;
+            }
+            .schools a {
+              color: #FF6601;
+              text-decoration: none;
+              padding: 0 8px;
+            }
+            .schools a:hover {
+              text-decoration: underline;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Welcome to <span class="highlight">Linkd</span>!</h1>
+            </div>
+            
+            <p>Hi ${userName},</p>
+            
+            <p>Thank you for joining the Linkd waitlist! We're excited to have you on board.</p>
+            
+            <p>We've registered your interest in bringing Linkd to <strong>${schoolName}</strong>. We'll keep you updated on our progress and let you know as soon as we're ready to launch at your school.</p>
+            
+            <p>In the meantime, feel free to check out our existing school communities:</p>
+            
+            <div class="schools">
+              <a href="https://upenn-frontend-production.up.railway.app/">UPenn</a> | 
+              <a href="https://utoronto.uselinkd.com/">UToronto</a> | 
+              <a href="https://stanford.uselinkd.com/">Stanford</a> | 
+              <a href="https://columbia.uselinkd.com/">Columbia</a> | 
+              <a href="https://yale.uselinkd.com/">Yale</a>
+            </div>
+            
+            <p>If you have any questions or feedback, please don't hesitate to reach out to us at <a href="mailto:founders@linkd.inc">founders@linkd.inc</a>.</p>
+            
+            <p>Best regards,<br>Eric & Tom<br>Linkd Team</p>
+            
+            <div class="footer">
+              <p>This email was sent to ${userEmail} because you signed up for the Linkd waitlist.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+      
+      const emailData = await resend.emails.send({
+        from: 'Linkd Waitlist <waitlist@linkd.inc>',
+        to: userEmail,
+        subject: `Welcome to Linkd's Waitlist, ${userName}!`,
+        html: emailHtml,
+      });
+      
+      console.log('Confirmation email sent:', emailData.id);
+    } catch (emailError) {
+      // Don't fail the registration if email sending fails
+      console.error('Failed to send confirmation email:', emailError);
+    }
+
     res.status(200).json({ 
       success: true,
       modified,
@@ -150,6 +282,20 @@ const validateConnections = async () => {
     results.push({ service: 'supabase', status: 'error', message: error.message });
   }
   
+  // Check Resend connection
+  try {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('Resend API key is not configured');
+    }
+
+    // We don't need to send an actual email, just check if Resend is initialized properly
+    console.log('✅ Resend API configured successfully');
+    results.push({ service: 'resend', status: 'ok' });
+  } catch (error) {
+    console.error('❌ Resend configuration error:', error.message);
+    results.push({ service: 'resend', status: 'error', message: error.message });
+  }
+  
   return results;
 };
 
@@ -159,6 +305,7 @@ app.get('/api/diagnose', (req, res) => {
     const diagnosis = {
       environment: process.env.NODE_ENV || 'not set',
       supabase: process.env.SUPABASE_URL ? '✓ configured' : '✗ missing',
+      resend: process.env.RESEND_API_KEY ? '✓ configured' : '✗ missing',
       port: PORT.toString()
     };
     
@@ -193,6 +340,74 @@ app.post('/api/test/clear-waitlist', async (req, res) => {
   } catch (error) {
     console.error('TEST: Clear waitlist error:', error);
     res.status(500).json({ error: 'Failed to clear waitlist', message: error.message });
+  }
+});
+
+// Add test endpoint to test email functionality
+app.post('/api/test/send-email', async (req, res) => {
+  // Only allow in development environment
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({ error: 'This endpoint is not available in production' });
+  }
+  
+  const { email, name, school } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required for testing' });
+  }
+  
+  try {
+    console.log('TEST: Attempting to send test email to', email);
+    
+    const userName = name || 'Test User';
+    const schoolName = school || 'Test University';
+    
+    // Create test email HTML content
+    const emailHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Test Email from Linkd</title>
+        <style>
+          body { font-family: sans-serif; }
+          .test-banner { 
+            background-color: #ffeb3b; 
+            padding: 10px; 
+            text-align: center;
+            margin-bottom: 20px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="test-banner">TEST EMAIL - PLEASE IGNORE</div>
+        <p>Hello ${userName},</p>
+        <p>This is a test email from Linkd for ${schoolName}.</p>
+        <p>If you're seeing this, the email functionality is working correctly!</p>
+        <p>Test completed at: ${new Date().toISOString()}</p>
+      </body>
+      </html>
+    `;
+    
+    const emailData = await resend.emails.send({
+      from: 'Linkd Test <waitlist@linkd.inc>',
+      to: email,
+      subject: `Linkd Test Email`,
+      html: emailHtml,
+    });
+    
+    console.log('TEST: Email sent successfully with ID:', emailData.id);
+    res.json({ 
+      success: true, 
+      message: 'Test email sent',
+      emailId: emailData.id
+    });
+  } catch (error) {
+    console.error('TEST: Email sending error:', error);
+    res.status(500).json({ 
+      error: 'Failed to send test email', 
+      message: error.message 
+    });
   }
 });
 
