@@ -67,6 +67,15 @@ p {
     font-weight: 500;
 }
 
+.highlight-yc a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.highlight-yc a:hover {
+    text-decoration: underline;
+}
+
 a {
     color: #0075ff;
     text-decoration: none;

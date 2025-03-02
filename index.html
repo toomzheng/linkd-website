@@ -230,16 +230,16 @@
                 if (result.success) {
                     // Removed confirmation email code
                     
-                    // Customize success message if email was modified
+                    // Customize success message - show original email, not modified one
                     if (result.modified) {
-                        formMessage.textContent = `Thanks! We've registered you with ${result.email}. We'll be in touch when we launch at your school.`;
+                        formMessage.textContent = `Thanks! We've registered you with ${email}. We'll be in touch when we launch at your school.`;
                     } else {
                         formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school.';
                     }
                     
                     // Removed email failure handling
 
-                    formMessage.className = 'success';
+                    formMessage.className = 'form-message success';
                     document.getElementById('signupForm').reset();
                 } else {
                     /*** ERROR HANDLING - SERVER RESPONSE ERROR ***/
