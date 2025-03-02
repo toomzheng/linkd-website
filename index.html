@@ -4,27 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linkd Inc.</title>
-    <!-- Preload fonts to prevent FOUT (Flash of Unstyled Text) -->
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;600&display=swap" as="style">
     <link rel="preload" href="https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp4U8WR32kg.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp1U8WR32kg.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp7c8WR32kg.woff2" as="font" type="font/woff2" crossorigin>
-    
+    <!-- Load CSS and fonts -->
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<br>
-<br>
-<br>
 <body>
     <div class="container">
         <main>
+            <br>
             <h1>Hey! Welcome to Linkd.</h1>
-            <p class="update"><em>update: we are backed by <span class="yc">Y Combinator</span> with a $500k pre-seed as a part of their X25 batch!</em></p>
+            <p class="date">February 27, 2025</p>
+            <p class="announcement"><em>update: we are backed by <span class="highlight-yc">Y Combinator</span> as a part of their X25 batch.</em></p>
             <h2>How do you discover people?</h2>
             
             <p>We're here to find out.</p>
@@ -41,28 +39,30 @@
             <!-- <br> -->
             
             <h2>About alumni.</h2>
-            <p>We've began experimenting with this new medium by working with one of the most powerful forms of connections: <b>alumni networks.</b> Begin by searching for people who've experienced your education.</p>
+            <p>We've began experimenting with this new medium by working with one of the most powerful forms of connections: <b>Alumni etworks.</b> Begin by searching for people who've experienced your education.</p>
             <p>Here's the schools where we've released our beta:</p>
-
-            <center>
+            <div class="schools-list" br style="margin-bottom: 42px;">
                 <p>
-                    <a href="https://upenn-frontend-production.up.railway.app/" target="_blank" rel="noopener noreferrer""><u>upenn</u></a>
+                    <a href="https://upenn-frontend-production.up.railway.app/" target="_blank" rel="noopener noreferrer"><u>upenn</u></a>
                     | <a href="https://columbia.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>columbia</u></a>
                     | <a href="https://stanford.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>stanford</u></a>
                     | <a href="https://utoronto.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>utoronto</u></a>
                     | <a href="https://yale.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>yale</u></a>
                 </p>
-            </center>
+            </div>
 
-            <div class="waitlist-section">
+            <div class="signup-section">
                 <p>Let us know if you'd like this at your school:</p>
-                <form class="waitlist-form" id="waitlistForm">
-                    <input type="text" id="name" name="name" placeholder="Name" required>
-                    <input type="email" id="email" name="email" placeholder="School email" required>
-                    <input type="email" id="email" name="email" placeholder="School email" required>
-                    <input type="tel" id="phone" name="phone" placeholder="Phone (Optional)">
-                    <input type="text" id="linkedin" name="linkedin" placeholder="LinkedIn (Optional)">
-                    <button type="submit" class="join-button">Join Waitlist</button>
+                <form class="signup-form" id="signupForm">
+                    <div class="form-row">
+                        <input type="text" id="name" name="name" placeholder="Full name" required>
+                        <input type="email" id="email" name="email" placeholder="School email (.edu preferred)" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="school" name="school" placeholder="University/College name" required>
+                        <input type="text" id="linkedin" name="linkedin" placeholder="LinkedIn profile URL (optional)">
+                    </div>
+                    <button type="submit" class="submit-button">Submit Request</button>
                 </form>
                 <p id="formMessage" class="form-message"></p>
             </div>
@@ -72,9 +72,7 @@
                 <a href="https://www.linkedin.com/in/toomzheng/" target="_blank" rel="noopener noreferrer">Tom</a>
             </p>
             
-            <p class="date">February 27, 2025</p>
-            
-            <p>for business and general inquiries: <a href="#" class="copy-email" data-email="founders@linkd.inc">founders@linkd.inc</a></p>
+            <p>for business and general inquiries: <a href="#" class="copy-email" data-email="founders@linkd.inc">founders@linkd.inc <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a></p>
         </main>
     </div>
 
@@ -90,17 +88,9 @@
                 
                 try {
                     await navigator.clipboard.writeText(email);
-                    
-                    // Store original text
                     const originalText = this.textContent;
-                    
-                    // Change text to show feedback
                     this.textContent = 'Copied!';
-                    
-                    // Clear any existing timeout
                     if (timeoutId) clearTimeout(timeoutId);
-                    
-                    // Reset text after 2 seconds
                     timeoutId = setTimeout(() => {
                         this.textContent = originalText;
                     }, 666);
@@ -108,184 +98,126 @@
                     console.error('Failed to copy:', err);
                 }
             });
+            
+            // Initialize Supabase with credentials from server
+            initSupabase();
         });
 
-        // Function to load environment variables from .env file
-        async function loadEnv() {
-            try {
-                const response = await fetch('/.env');
-                const text = await response.text();
-                
-                // Parse .env file
-                const env = {};
-                text.split('\n').forEach(line => {
-                    const parts = line.split('=');
-                    if (parts.length === 2) {
-                        const key = parts[0].trim();
-                        const value = parts[1].trim();
-                        env[key] = value;
-                    }
-                });
-                
-                return env;
-            } catch (error) {
-                console.error('Error loading .env file:', error);
-                return {};
-            }
-        }
-
-        // Rate limiting functions
-        const RateLimit = {
-            // Check if user is rate limited
-            isLimited: function() {
-                const submissions = this.getSubmissions();
-                
-                // If user has submitted recently, check rate limits
-                if (submissions.length > 0) {
-                    // Get current time
-                    const now = new Date().getTime();
-                    
-                    // Daily limit: max 5 submissions per day
-                    const last24Hours = submissions.filter(time => now - time < 24 * 60 * 60 * 1000);
-                    if (last24Hours.length >= 5) {
-                        return {
-                            limited: true,
-                            reason: 'You have reached the daily submission limit. Please try again tomorrow.',
-                            remainingTime: this.getTimeUntilNextAvailable(last24Hours[0], 24 * 60 * 60 * 1000)
-                        };
-                    }
-                    
-                    // Short-term limit: max 2 submissions per hour
-                    const lastHour = submissions.filter(time => now - time < 60 * 60 * 1000);
-                    if (lastHour.length >= 2) {
-                        return {
-                            limited: true,
-                            reason: 'Please wait before submitting again.',
-                            remainingTime: this.getTimeUntilNextAvailable(lastHour[0], 60 * 60 * 1000)
-                        };
-                    }
-                }
-                
-                return { limited: false };
-            },
-            
-            // Record a new submission
-            recordSubmission: function() {
-                const submissions = this.getSubmissions();
-                submissions.push(new Date().getTime());
-                
-                // Keep only the last 10 submissions to avoid localStorage bloat
-                if (submissions.length > 10) {
-                    submissions.shift();
-                }
-                
-                localStorage.setItem('waitlist_submissions', JSON.stringify(submissions));
-            },
-            
-            // Get all recorded submissions
-            getSubmissions: function() {
-                const stored = localStorage.getItem('waitlist_submissions');
-                return stored ? JSON.parse(stored) : [];
-            },
-            
-            // Calculate time until next available submission
-            getTimeUntilNextAvailable: function(oldestRelevantTime, timeWindow) {
-                const now = new Date().getTime();
-                const timeElapsed = now - oldestRelevantTime;
-                const timeRemaining = timeWindow - timeElapsed;
-                
-                // Convert to minutes for display
-                return Math.ceil(timeRemaining / (60 * 1000));
-            },
-            
-            // Format remaining time for display
-            formatRemainingTime: function(minutes) {
-                if (minutes < 60) {
-                    return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
-                } else {
-                    const hours = Math.floor(minutes / 60);
-                    const remainingMinutes = minutes % 60;
-                    return `${hours} hour${hours !== 1 ? 's' : ''} ${remainingMinutes > 0 ? `and ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}` : ''}`;
-                }
-            }
-        };
-
-        // Initialize Supabase when env variables are loaded
+        // Fetch Supabase credentials from server and initialize client
         async function initSupabase() {
-            const env = await loadEnv();
-            
-            // Get Supabase credentials from env or fallback to hardcoded values
-            const supabaseUrl = env.SUPABASE_URL || 'https://lunybwbnzuueyvkzgpbs.supabase.co';
-            const supabaseKey = env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1bnlid2JuenV1ZXl2a3pncGJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MTEyMDYsImV4cCI6MjA1NjQ4NzIwNn0.iSaoqHoyHZRJVZ_myfpksLTMD8K4G3A7LyHKH7ZnUwQ';
-            
-            // Create Supabase client
-            const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-            
-            // Handle form submission
-            document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const formMessage = document.getElementById('formMessage');
-                
-                // Check rate limiting
-                const rateLimitCheck = RateLimit.isLimited();
-                if (rateLimitCheck.limited) {
-                    formMessage.textContent = `${rateLimitCheck.reason} Please try again in ${RateLimit.formatRemainingTime(rateLimitCheck.remainingTime)}.`;
-                    formMessage.className = 'form-message rate-limit';
-                    return;
+            try {
+                const response = await fetch('/api/config');
+                if (!response.ok) {
+                    throw new Error('Failed to load configuration');
                 }
                 
-                formMessage.textContent = 'Submitting...';
+                const config = await response.json();
                 
-                // Get form data
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const phone = document.getElementById('phone').value;
-                const linkedin = document.getElementById('linkedin').value;
+                // Initialize Supabase client with fetched credentials
+                window.supabaseClient = supabase.createClient(
+                    config.supabaseUrl,
+                    config.supabaseKey
+                );
                 
-                try {
-                    // Insert data into Supabase
-                    const { data, error } = await supabaseClient
-                        .from('waitlist') // Replace with your table name
-                        .insert([
-                            { 
-                                name: name, 
-                                email: email, 
-                                phone: phone, 
-                                linkedin: linkedin,
-                                created_at: new Date()
-                            }
-                        ]);
-                    
-                    if (error) throw error;
-                    
-                    // Record this submission for rate limiting
-                    RateLimit.recordSubmission();
-                    
-                    // Success message
-                    formMessage.textContent = 'Thanks for joining our waitlist!';
-                    formMessage.className = 'form-message success';
-                    
-                    // Reset form
-                    document.getElementById('waitlistForm').reset();
-                    
-                } catch (error) {
-                    console.error('Error submitting form:', error);
-                    
-                    // Check if error is due to duplicate email
-                    if (error.code === '23505' && error.details?.includes('email')) {
-                        formMessage.textContent = 'This email is already on our waitlist.';
-                    } else {
-                        formMessage.textContent = 'Something went wrong. Please try again.';
-                    }
-                    
-                    formMessage.className = 'form-message error';
-                }
-            });
+                console.log('Supabase client initialized successfully');
+            } catch (error) {
+                console.error('Error initializing Supabase:', error);
+            }
         }
-
-        // Initialize when the page loads
-        document.addEventListener('DOMContentLoaded', initSupabase);
+        
+        // Rate limiting functionality
+        const RATE_LIMIT = 7; // max submissions per hour
+        const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
+        
+        function checkRateLimit() {
+            try {
+                // Get stored submissions
+                const storedSubmissions = localStorage.getItem('formSubmissions');
+                let submissions = storedSubmissions ? JSON.parse(storedSubmissions) : [];
+                
+                // Clean up old entries (older than 1 hour)
+                const now = Date.now();
+                submissions = submissions.filter(timestamp => now - timestamp < RATE_LIMIT_WINDOW);
+                
+                // Check if user has exceeded limit
+                if (submissions.length >= RATE_LIMIT) {
+                    const oldestSubmission = submissions[0];
+                    const resetTime = new Date(oldestSubmission + RATE_LIMIT_WINDOW);
+                    const minutesUntilReset = Math.ceil((resetTime - now) / (60 * 1000));
+                    
+                    return {
+                        allowed: false,
+                        message: `Rate limit reached. Please try again in about ${minutesUntilReset} minute${minutesUntilReset > 1 ? 's' : ''}.`
+                    };
+                }
+                
+                // Update submissions
+                submissions.push(now);
+                localStorage.setItem('formSubmissions', JSON.stringify(submissions));
+                
+                return { allowed: true };
+            } catch (e) {
+                console.error('Rate limit check error:', e);
+                // If localStorage fails, still allow submission
+                return { allowed: true };
+            }
+        }
+        
+        // Handle form submission
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formMessage = document.getElementById('formMessage');
+            formMessage.textContent = 'Submitting...';
+            formMessage.className = 'form-message';
+            
+            // Ensure Supabase is initialized
+            if (!window.supabaseClient) {
+                formMessage.textContent = 'Unable to connect to server. Please refresh and try again.';
+                formMessage.className = 'form-message error';
+                return;
+            }
+            
+            // Check rate limit
+            const rateLimitCheck = checkRateLimit();
+            if (!rateLimitCheck.allowed) {
+                formMessage.textContent = rateLimitCheck.message;
+                formMessage.className = 'form-message error';
+                return;
+            }
+            
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('waitlist')
+                    .insert([{ 
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        school: document.getElementById('school').value,
+                        linkedin: document.getElementById('linkedin').value,
+                        created_at: new Date()
+                    }]);
+                
+                if (error) {
+                    console.error('Supabase error:', error);
+                    // Still allowing duplicate emails by not specifically handling the 23505 error
+                    // Just throw a generic error for other issues
+                    if (error.code !== '23505') {
+                        throw error;
+                    }
+                }
+                
+                formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school.';
+                formMessage.className = 'form-message success';
+                document.getElementById('signupForm').reset();
+                
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                
+                // We're no longer checking for duplicate emails - allow them through
+                // Just handle other unexpected errors
+                formMessage.textContent = 'Something went wrong. Please try again. ' + (error.message || '');
+                formMessage.className = 'form-message error';
+            }
+        });
     </script>
 </body>
 </html>

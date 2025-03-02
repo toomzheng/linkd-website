@@ -1,6 +1,30 @@
+/* Font loading strategy */
+@font-face {
+    font-family: 'Inconsolata';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp4U8WR32kg.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Inconsolata';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp1U8WR32kg.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Inconsolata';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp7c8WR32kg.woff2) format('woff2');
+}
+
 body {
     font-family: 'Inconsolata', monospace;
-    font-display: swap;
     margin: 0;
     padding: 0;
     background-color: #f9f9f9;
@@ -33,13 +57,13 @@ p {
     font-size: 1rem;
 }
 
-.update {
-    margin-bottom: 2rem;
+.announcement {
+    margin-bottom: -0.5rem;
     font-size: 0.95rem;
 }
 
-.yc {
-    color: #ff6601; /* YC's brand orange */
+.highlight-yc {
+    color: #ff6601;
     font-weight: 500;
 }
 
@@ -62,21 +86,12 @@ a:hover {
     opacity: 0.8; /* Subtle hover effect */
 }
 
-.cta {
-    margin-top: 2rem;
-    font-weight: 500;
-}
-
 .signature, .date {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0rem;
 }
 
 .date {
-    margin-bottom: 2rem;
-}
-
-.contact-link {
-    display: inline-block;
+    margin-bottom: 0rem;
 }
 
 .copy-email {
@@ -85,6 +100,20 @@ a:hover {
     border-bottom: 1px dashed #1a1a1a;
     text-decoration: none;
     transition: opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.copy-icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.copy-email:hover .copy-icon {
+    opacity: 1;
 }
 
 .copy-email:hover {
@@ -92,7 +121,64 @@ a:hover {
     text-decoration: none;
 }
 
-.join-button:hover {
+.schools-list {
+    text-align: center;
+    margin: 0;
+}
+
+.signup-section {
+    margin-top: 1rem;
+    padding: 0rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.95rem;
+    background: white;
+    transition: border-color 0.2s ease;
+}
+
+.form-row input:focus {
+    outline: none;
+    border-color: #0075ff;
+}
+
+.form-row input::placeholder {
+    color: #666;
+}
+
+.submit-button {
+    margin-top: 4px;
+    padding: 10px 20px;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
     background-color: #333;
 }
 
@@ -113,14 +199,6 @@ a:hover {
     border-radius: 4px;
 }
 
-.form-message.rate-limit {
-    color: #e65100;
-    font-weight: 500;
-    padding: 8px 12px;
-    background-color: rgba(230, 81, 0, 0.08);
-    border-radius: 4px;
-}
-
 @media (max-width: 600px) {
     .container {
         padding: 2rem 1rem;
@@ -132,5 +210,9 @@ a:hover {
     
     h2 {
         font-size: 1.1rem;
+    }
+
+    .form-row {
+        flex-direction: column;
     }
 }
