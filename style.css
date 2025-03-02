@@ -88,6 +88,7 @@ a:hover {
 
 .signature, .date {
     margin-bottom: 0rem;
+    margin-top: 1rem;
 }
 
 .date {
@@ -131,29 +132,31 @@ a:hover {
     padding: 0rem;
     background: rgba(0, 0, 0, 0.02);
     border-radius: 8px;
+    margin-bottom: 3rem;
 }
 
 .signup-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 1rem;
+    gap: 8px;
+    margin-top: 0.75rem;
 }
 
 .form-row {
     display: flex;
-    gap: 12px;
+    gap: 8px;
 }
 
 .form-row input {
     flex: 1;
-    padding: 10px 14px;
+    padding: 8px 12px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
+    border-radius: 5px;
     font-family: 'Inconsolata', monospace;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     background: white;
     transition: border-color 0.2s ease;
+    height: 20px;
 }
 
 .form-row input:focus {
@@ -166,25 +169,27 @@ a:hover {
 }
 
 .submit-button {
-    margin-top: 4px;
-    padding: 10px 20px;
-    background: #1a1a1a;
-    color: white;
-    border: none;
-    border-radius: 6px;
+    align-self: flex-start;
+    margin-top: 2px;
+    padding: 7px 16px;
+    background: white;
+    color: #1a1a1a;
+    border: 1.5px solid #1a1a1a;
+    border-radius: 5px;
     font-family: 'Inconsolata', monospace;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
 
 .submit-button:hover {
-    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .form-message {
-    margin-top: 1rem;
-    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
 }
 
 .form-message.success {
@@ -194,7 +199,7 @@ a:hover {
 .form-message.error {
     color: #c62828;
     font-weight: 500;
-    padding: 8px 12px;
+    padding: 6px 10px;
     background-color: rgba(198, 40, 40, 0.08);
     border-radius: 4px;
 }

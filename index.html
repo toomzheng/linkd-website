@@ -33,6 +33,8 @@
             <p>Our team building the world's first search algorithm designed for the experiences of people. Social networks should be centered on experiences.</p>
             
             <p>It's called <b>Linkd.</b></p>
+
+            <p class="announcement"><em>If you're a <u>company</u> interested in people search for recruiting, teams, or leads, please directly contact us below.</em></p>
             
             <!-- <p>We're designing a lean team of ambitious engineers who love the idea of redefining interation between people and information.</p>
             
@@ -42,7 +44,7 @@
             <!-- <br> -->
             
             <h2>About alumni.</h2>
-            <p>We've began experimenting with this new medium by working with one of the most powerful forms of connections: <b>Alumni etworks.</b> Begin by searching for people who've experienced your education.</p>
+            <p>We've began experimenting with this new medium by working with one of the most powerful forms of connections: <b>Alumni Networks.</b> Begin by searching for people who've experienced your education.</p>
             <p>Here's the schools where we've released our beta:</p>
             <div class="schools-list" br style="margin-bottom: 42px;">
                 <p>
@@ -69,7 +71,6 @@
                 </form>
                 <p id="formMessage" class="form-message"></p>
             </div>
-            
             <p class="signature">-
                 <a href="https://www.linkedin.com/in/eric-mao/" target="_blank" rel="noopener noreferrer">Eric</a> & 
                 <a href="https://www.linkedin.com/in/toomzheng/" target="_blank" rel="noopener noreferrer">Tom</a>
@@ -96,7 +97,7 @@
                     if (timeoutId) clearTimeout(timeoutId);
                     timeoutId = setTimeout(() => {
                         this.textContent = originalText;
-                    }, 666);
+                    },);
                 } catch (err) {
                     console.error('Failed to copy:', err);
                 }
@@ -188,14 +189,21 @@
                 return;
             }
             
+            // Gather form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const school = document.getElementById('school').value;
+            const linkedin = document.getElementById('linkedin').value;
+            
             try {
+                // Insert into Supabase
                 const { data, error } = await window.supabaseClient
                     .from('waitlist')
                     .insert([{ 
-                        name: document.getElementById('name').value,
-                        email: document.getElementById('email').value,
-                        school: document.getElementById('school').value,
-                        linkedin: document.getElementById('linkedin').value,
+                        name,
+                        email,
+                        school,
+                        linkedin,
                         created_at: new Date()
                     }]);
                 
@@ -208,7 +216,27 @@
                     }
                 }
                 
-                formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school.';
+                // Send confirmation email
+                try {
+                    await fetch('/api/send-confirmation', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            school
+                        })
+                    });
+                    // We don't need to check the response - if it fails, we still want to show success
+                    // for the form submission, and we log errors server-side
+                } catch (emailError) {
+                    console.error('Error sending confirmation email:', emailError);
+                    // Continue with success message even if email fails
+                }
+                
+                formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school. Check your email for more details.';
                 formMessage.className = 'form-message success';
                 document.getElementById('signupForm').reset();
                 
