@@ -29,31 +29,31 @@ body {
     padding: 0;
     background-color: #f9f9f9;
     color: #1a1a1a;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .container {
-    max-width: 700px;
+    max-width: 650px;
     margin: 0 auto;
-    padding: 3rem 2rem;
+    padding: 1.5rem 0.8rem;
 }
 
 h1 {
     font-weight: 600;
     font-size: 1.8rem;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.4rem 0;
     color: #000;
 }
 
 h2 {
     font-weight: 600;
     font-size: 1.2rem;
-    margin: 2rem 0 1rem 0;
+    margin: 2.5rem 0 0.4rem 0;
     color: #000;
 }
 
 p {
-    margin: 1rem 0;
+    margin: 0.64rem 0;
     font-size: 1rem;
 }
 
@@ -96,12 +96,12 @@ a:hover {
 }
 
 .signature, .date {
-    margin-bottom: 0rem;
-    margin-top: 1rem;
+    margin-bottom: 0;
+    margin-top: 0.85rem;
 }
 
 .date {
-    margin-bottom: 0rem;
+    margin-bottom: 0;
 }
 
 .copy-email {
@@ -112,7 +112,7 @@ a:hover {
     transition: opacity 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .copy-icon {
@@ -137,27 +137,27 @@ a:hover {
 }
 
 .signup-section {
-    margin-top: 1rem;
-    padding: 0rem;
+    margin-top: 0.85rem;
+    padding: 0;
     border-radius: 8px;
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
 }
 
 .signup-form {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 0.75rem;
+    gap: 6px;
+    margin-top: 0.68rem;
 }
 
 .form-row {
     display: flex;
-    gap: 8px;
+    gap: 7px;
 }
 
 .form-row input {
     flex: 1;
-    padding: 8px 12px;
+    padding: 7px 11px;
     border: 1px solid rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     font-family: 'Inconsolata', monospace;
@@ -179,7 +179,7 @@ a:hover {
 .submit-button {
     align-self: flex-start;
     margin-top: 2px;
-    padding: 7px 16px;
+    padding: 6px 15px;
     background: white;
     color: #1a1a1a;
     border: 1.5px solid #1a1a1a;
@@ -196,7 +196,7 @@ a:hover {
 }
 
 .form-message {
-    margin-top: 0.75rem;
+    margin-top: 0.67rem;
     font-size: 0.85rem;
 }
 
@@ -210,7 +210,7 @@ a:hover {
 
 @media (max-width: 600px) {
     .container {
-        padding: 2rem 1rem;
+        padding: 1.75rem 0.9rem;
     }
     
     h1 {
@@ -223,5 +223,6 @@ a:hover {
 
     .form-row {
         flex-direction: column;
+        gap: 5px;
     }
 }

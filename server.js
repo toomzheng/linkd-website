@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const app = express();
-const PORT = process.env.PORT || 3000;
+let PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 3000) : 3001;
 
 // Initialize Supabase on server side for handling duplicates
 const supabase = createClient(
@@ -237,9 +237,15 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server with proper error handling and port recovery
-const startServer = () => {
-  const server = app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+const startServer = (port = PORT) => {
+  // Use the provided port or fall back to the global PORT
+  const serverPort = port;
+  
+  const server = app.listen(serverPort, () => {
+    console.log(`Server running on port ${serverPort}`);
+    // Update the global PORT to match what we're actually using
+    PORT = serverPort;
+    
     // Run validation after server starts
     validateConnections().then(() => {
       console.log('🚀 All connections validated successfully');
@@ -251,12 +257,15 @@ const startServer = () => {
   // Handle server errors
   server.on('error', (error) => {
     if (error.code === 'EADDRINUSE') {
-      console.error(`Port ${PORT} is already in use. Trying another port...`);
+      console.error(`Port ${serverPort} is already in use. Trying to recover...`);
       // Railway assigns PORT, so we shouldn't try different ports in production
       if (process.env.NODE_ENV !== 'production') {
         setTimeout(() => {
           server.close();
-          startServer(PORT + 1);
+          // In development, if 3001 is taken, try 3002, 3003, etc.
+          const nextPort = serverPort + 1;
+          console.log(`Development mode: Attempting to use port ${nextPort} instead...`);
+          startServer(nextPort);
         }, 1000);
       } else {
         console.error('Critical error: Port already in use in production environment');
@@ -287,4 +296,5 @@ const startServer = () => {
 };
 
 // Replace app.listen() with startServer()
+console.log(`Starting server in ${process.env.NODE_ENV || 'development'} mode...`);
 startServer(); 

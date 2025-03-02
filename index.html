@@ -22,15 +22,14 @@
 <body>
     <div class="container">
         <main>
-            <br>
             <h1>Hey! Welcome to Linkd.</h1>
             <p class="date">February 27, 2025</p>
-            <p class="announcement"><em>update: we are backed by <span class="highlight-yc"><a href="https://www.ycombinator.com/"">Y Combinator</a></span> as a part of their X25 batch.</em></p>
+            <p class="announcement"><em>update: we are backed by <span class="highlight-yc"><a href="https://www.ycombinator.com/" target="_blank" rel="noopener noreferrer">Y Combinator</a></span> as a part of their X25 batch.</em></p>
             <h2>How do you discover people?</h2>
             
             <p>We're here to find out.</p>
             
-            <p>Our team building the world's first search algorithm designed for the experiences of people. Social networks should be centered on experiences.</p>
+            <p>Our team building the world's first search algorithm designed around human interactions. Social networks should be centered on ourexperiences.</p>
             
             <p>It's called <b>Linkd.</b></p>
 
@@ -49,10 +48,11 @@
             <div class="schools-list" br style="margin-bottom: 22px;">
                 <p>
                     <a href="https://upenn-frontend-production.up.railway.app/" target="_blank" rel="noopener noreferrer"><u>upenn</u></a>
-                    | <a href="https://columbia.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>columbia</u></a>
-                    | <a href="https://stanford.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>stanford</u></a>
                     | <a href="https://utoronto.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>utoronto</u></a>
+                    | <a href="https://stanford.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>stanford</u></a>
+                    | <a href="https://columbia.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>columbia</u></a>
                     | <a href="https://yale.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>yale</u></a>
+                    | <u>berkeley</u><i>(soon!)</i>
                 </p>
             </div>
 
@@ -230,16 +230,16 @@
                 if (result.success) {
                     // Removed confirmation email code
                     
-                    // Customize success message - show original email, not modified one
+                    // Customize success message if email was modified
                     if (result.modified) {
-                        formMessage.textContent = `Thanks! We've registered you with ${email}. We'll be in touch when we launch at your school.`;
+                        formMessage.textContent = `Thanks! We've registered you with ${result.email}. We'll be in touch when we launch at your school.`;
                     } else {
                         formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school.';
                     }
                     
                     // Removed email failure handling
 
-                    formMessage.className = 'form-message success';
+                    formMessage.className = 'success';
                     document.getElementById('signupForm').reset();
                 } else {
                     /*** ERROR HANDLING - SERVER RESPONSE ERROR ***/
