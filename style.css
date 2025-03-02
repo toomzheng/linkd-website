@@ -1,73 +1,105 @@
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inconsolata', monospace;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
-    color: #333;
+    background-color: #fff;
+    color: #1a1a1a;
     line-height: 1.6;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
-    padding: 2rem;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-header {
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #e9ecef;
-    padding-bottom: 1rem;
+    padding: 3rem 2rem;
 }
 
 h1 {
-    color: #4263eb;
     font-weight: 600;
-    font-size: 2.5rem;
-    margin: 0;
-    letter-spacing: -0.5px;
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem 0;
+    color: #000;
 }
 
-.tagline {
-    font-size: 1.5rem;
-    color: #495057;
-    margin-bottom: 1.5rem;
-    font-weight: 300;
+h2 {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 2rem 0 1rem 0;
+    color: #000;
 }
 
-.description {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+p {
+    margin: 1rem 0;
+    font-size: 1rem;
 }
 
-.description p {
-    margin: 0.5rem 0;
+.update {
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
 }
 
-footer {
+a {
+    color: #0075ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Signature links styling */
+.signature a {
+    color: inherit; /* Use the same color as the text */
+    text-decoration: underline; /* Always show underline */
+}
+
+.signature a:hover {
+    opacity: 0.8; /* Subtle hover effect */
+}
+
+.cta {
     margin-top: 2rem;
-    text-align: center;
+    font-weight: 500;
+}
+
+.signature, .date {
+    margin-bottom: 0.25rem;
+}
+
+.date {
+    margin-bottom: 2rem;
+}
+
+.contact-link {
+    display: inline-block;
+}
+
+.join-button:hover {
+    background-color: #333;
+}
+
+.form-message {
+    margin-top: 1rem;
     font-size: 0.9rem;
-    color: #868e96;
-    padding-top: 1rem;
-    border-top: 1px solid #e9ecef;
+}
+
+.form-message.success {
+    color: #2e7d32;
+}
+
+.form-message.error {
+    color: #c62828;
 }
 
 @media (max-width: 600px) {
     .container {
-        padding: 1rem;
+        padding: 2rem 1rem;
     }
     
     h1 {
-        font-size: 2rem;
+        font-size: 1.6rem;
     }
     
-    .tagline {
-        font-size: 1.2rem;
+    h2 {
+        font-size: 1.1rem;
     }
 }

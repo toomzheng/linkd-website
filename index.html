@@ -3,27 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linkd</title>
+    <title>Linkd Inc.</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Linkd</h1>
-        </header>
         <main>
-            <p class="tagline">Connect. Share. Discover.</p>
-            <div class="description">
-                <p>A simple platform for sharing your important links in one place.</p>
-                <p>Perfect for creators, professionals, and anyone who wants a clean online presence.</p>
+            <h1>Hey! Welcome to Linkd.</h1>
+            <p class="update"><em>update: we are backed by Y Combinator as a part of their X25 batch!</em></p>
+            <h2>How do you discover people?</h2>
+            
+            <p>Building safe superintelligence (SSI) is the most important technical problem of our time.</p>
+            
+            <p>We have started the world's first straight-shot SSI lab, with one goal and one product: a safe superintelligence.</p>
+            
+            <p>It's called Safe Superintelligence Inc.</p>
+        
+            
+            <p>We are an American company with offices in Palo Alto and Tel Aviv, where we have deep roots and the ability to recruit top technical talent.</p>
+            
+            <p>We are assembling a lean, cracked team of the world's best engineers and researchers dedicated to focusing on SSI and nothing else.</p>
+            
+            <p>If that's you, we offer an opportunity to do your life's work and help solve the most important technical challenge of our age.</p>
+            
+            <p class="cta">Now is the time. Join us.</p>
+            
+            <div class="waitlist-section">
+                <p>You can also sign up for our waitlist here:</p>
+                <form class="waitlist-form" id="waitlistForm">
+                    <input type="text" id="name" name="name" placeholder="Name" required>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Phone (Optional)">
+                    <input type="text" id="linkedin" name="linkedin" placeholder="LinkedIn (Optional)">
+                    <button type="submit" class="join-button">Join Waitlist</button>
+                </form>
+                <p id="formMessage" class="form-message"></p>
             </div>
+            
+            <p class="signature">
+                <a href="https://www.linkedin.com/in/eric-mao/" target="_blank" rel="noopener noreferrer">Eric</a> & 
+                <a href="https://www.linkedin.com/in/toomzheng/" target="_blank" rel="noopener noreferrer">Tom</a>
+            </p>
+            
+            <p class="date">February 27, 2025</p>
+            
+            <p><a href="#" class="contact-link">Contact</a></p>
         </main>
-        <footer>
-            <p>© 2023 Linkd - Minimalist link sharing</p>
-        </footer>
     </div>
+
+    <script>
+        // Function to load environment variables from .env file
+        async function loadEnv() {
+            try {
+                const response = await fetch('/.env');
+                const text = await response.text();
+                
+                // Parse .env file
+                const env = {};
+                text.split('\n').forEach(line => {
+                    const parts = line.split('=');
+                    if (parts.length === 2) {
+                        const key = parts[0].trim();
+                        const value = parts[1].trim();
+                        env[key] = value;
+                    }
+                });
+                
+                return env;
+            } catch (error) {
+                console.error('Error loading .env file:', error);
+                return {};
+            }
+        }
+
+        // Initialize Supabase when env variables are loaded
+        async function initSupabase() {
+            const env = await loadEnv();
+            
+            // Get Supabase credentials from env or fallback to hardcoded values
+            const supabaseUrl = env.SUPABASE_URL || 'https://lunybwbnzuueyvkzgpbs.supabase.co';
+            const supabaseKey = env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1bnlid2JuenV1ZXl2a3pncGJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MTEyMDYsImV4cCI6MjA1NjQ4NzIwNn0.iSaoqHoyHZRJVZ_myfpksLTMD8K4G3A7LyHKH7ZnUwQ';
+            
+            // Create Supabase client
+            const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+            
+            // Handle form submission
+            document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formMessage = document.getElementById('formMessage');
+                formMessage.textContent = 'Submitting...';
+                
+                // Get form data
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const linkedin = document.getElementById('linkedin').value;
+                
+                try {
+                    // Insert data into Supabase
+                    const { data, error } = await supabaseClient
+                        .from('waitlist') // Replace with your table name
+                        .insert([
+                            { 
+                                name: name, 
+                                email: email, 
+                                phone: phone, 
+                                linkedin: linkedin,
+                                created_at: new Date()
+                            }
+                        ]);
+                    
+                    if (error) throw error;
+                    
+                    // Success message
+                    formMessage.textContent = 'Thanks for joining our waitlist!';
+                    formMessage.className = 'form-message success';
+                    
+                    // Reset form
+                    document.getElementById('waitlistForm').reset();
+                    
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    formMessage.textContent = 'Something went wrong. Please try again.';
+                    formMessage.className = 'form-message error';
+                }
+            });
+        }
+
+        // Initialize when the page loads
+        document.addEventListener('DOMContentLoaded', initSupabase);
+    </script>
 </body>
 </html>
