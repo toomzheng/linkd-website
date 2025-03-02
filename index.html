@@ -130,7 +130,7 @@
         }
         
         // Rate limiting functionality
-        const RATE_LIMIT = 7; // max submissions per hour
+        const RATE_LIMIT = 14; // max submissions per hour
         const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
         
         function checkRateLimit() {
@@ -261,6 +261,19 @@
                 } else {
                     formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school. Check your email for more details.';
                 }
+                
+                // Add note about email if it failed but form submitted
+                const emailFailed = emailResponse && !emailResponse.ok;
+                if (emailFailed) {
+                    const noteElem = document.createElement('p');
+                    noteElem.className = 'email-note';
+                    noteElem.textContent = '(Note: We had trouble sending your confirmation email, but your request was saved.)';
+                    noteElem.style.fontSize = '0.85em';
+                    noteElem.style.marginTop = '0.5em';
+                    noteElem.style.color = '#666';
+                    formMessage.appendChild(noteElem);
+                }
+                
                 formMessage.className = 'form-message success';
                 document.getElementById('signupForm').reset();
                 

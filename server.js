@@ -9,23 +9,10 @@ const PORT = process.env.PORT || 3000;
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Initialize Supabase with service role key for admin operations
-// This bypasses RLS policies for server-side operations
+// Initialize Supabase on server side for handling duplicates
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY, 
-  {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    }
-  }
-);
-
-// For client use only - safer with limited permissions
-const clientSupabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_KEY
 );
 
 // Parse JSON body
@@ -36,16 +23,11 @@ app.use(express.static(path.join(__dirname, '.')));
 
 // Create a config endpoint to provide credentials to the frontend
 app.get('/api/config', (req, res) => {
-  try {
-    // Only send what the frontend needs - NEVER send service key to client
-    res.json({
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseKey: process.env.SUPABASE_ANON_KEY
-    });
-  } catch (err) {
-    console.error('Error serving config:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  // Only send what the frontend needs
+  res.json({
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseKey: process.env.SUPABASE_ANON_KEY
+  });
 });
 
 // Add endpoint to handle waitlist entries with duplicate checking
@@ -53,94 +35,68 @@ app.post('/api/waitlist', async (req, res) => {
   try {
     const { name, email, school, linkedin } = req.body;
     
-    // Basic input validation
     if (!name || !email || !school) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    // Email format validation
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
+    console.log('Processing waitlist entry for:', email);
+    console.log('Supabase client initialized with URL:', process.env.SUPABASE_URL);
+    
+    // Check if the email already exists
+    const { data: existingData, error: checkError } = await supabase
+      .from('waitlist')
+      .select('*')
+      .eq('email', email)
+      .single();
+    
+    if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "not found" which is expected for new emails
+      console.error('Error checking existing email:', checkError);
+      return res.status(500).json({ error: 'Database error', details: checkError });
     }
     
-    // Additional security measures
-    const sanitizedInput = {
-      name: name.slice(0, 100), // Limit length
-      email: email.slice(0, 100).toLowerCase(), // Normalize and limit
-      school: school.slice(0, 100),
-      linkedin: linkedin ? linkedin.slice(0, 200) : ''
-    };
+    let result;
     
-    // Original email without any suffix
-    const originalEmail = sanitizedInput.email;
-    let finalEmail = originalEmail;
-    let insertSuccess = false;
-    let attempts = 0;
-    const MAX_ATTEMPTS = 10; // Safety limit
-    
-    // Try to insert with modified email if needed
-    while (!insertSuccess && attempts < MAX_ATTEMPTS) {
-      try {
-        // Try to insert the record
-        const { data, error } = await supabase
-          .from('waitlist')
-          .insert([{
-            name: sanitizedInput.name,
-            email: finalEmail,
-            school: sanitizedInput.school,
-            linkedin: sanitizedInput.linkedin
-          }]);
-        
-        if (error) {
-          // If it's a duplicate email error
-          if (error.code === '23505') {
-            // Increment counter and try again with modified email
-            attempts++;
-            
-            // Check how many entries already exist with similar email pattern
-            const { data: existingCount, error: countError } = await supabase
-              .from('waitlist')
-              .select('email')
-              .ilike('email', `${originalEmail.split('@')[0]}%@${originalEmail.split('@')[1]}`);
-            
-            if (countError) {
-              console.error('Error counting existing emails:', countError);
-              return res.status(500).json({ error: 'Server error counting existing emails' });
-            }
-            
-            // Create a new email with a number suffix before the @ symbol
-            const emailParts = originalEmail.split('@');
-            finalEmail = `${emailParts[0]}${existingCount.length}@${emailParts[1]}`;
-            
-            continue; // Try again with the new email
-          } else {
-            // Some other error occurred
-            console.error('Insert error:', error);
-            return res.status(500).json({ error: 'Server error creating record' });
-          }
-        }
-        
-        // If we got here, insertion was successful
-        insertSuccess = true;
-      } catch (insertErr) {
-        console.error('Error during insert attempt:', insertErr);
-        return res.status(500).json({ error: 'Server error during insert' });
+    if (existingData) {
+      // Email exists, update the record instead
+      const { data: updateData, error: updateError } = await supabase
+        .from('waitlist')
+        .update({ name, school, linkedin, updated_at: new Date() })
+        .eq('email', email)
+        .select();
+      
+      if (updateError) {
+        console.error('Error updating record:', updateError);
+        return res.status(500).json({ error: 'Failed to update record', details: updateError });
       }
+      
+      result = updateData;
+      console.log('Updated existing record for:', email);
+    } else {
+      // New email, insert a new record
+      const { data: insertData, error: insertError } = await supabase
+        .from('waitlist')
+        .insert([{ 
+          name,
+          email,
+          school,
+          linkedin,
+          created_at: new Date()
+        }])
+        .select();
+      
+      if (insertError) {
+        console.error('Error inserting record:', insertError);
+        return res.status(500).json({ error: 'Failed to insert record', details: insertError });
+      }
+      
+      result = insertData;
+      console.log('Inserted new record for:', email);
     }
     
-    if (!insertSuccess) {
-      return res.status(500).json({ error: 'Failed to insert after multiple attempts' });
-    }
-    
-    // Return the email that was actually used (may have been modified)
-    return res.status(200).json({ 
-      success: true, 
-      email: finalEmail,
-      modified: finalEmail !== originalEmail 
-    });
+    return res.json({ success: true, data: result });
   } catch (err) {
     console.error('Waitlist error:', err);
-    return res.status(500).json({ error: 'Server error processing request' });
+    return res.status(500).json({ error: 'Server error processing waitlist request', details: String(err) });
   }
 });
 
@@ -243,45 +199,6 @@ app.get('/api/test-email', async (req, res) => {
   } catch (err) {
     console.error('Test email error:', err);
     return res.status(500).json({ error: String(err) });
-  }
-});
-
-// Test endpoint to check Supabase connection and waitlist table
-app.get('/api/test-supabase', async (req, res) => {
-  try {
-    console.log('Testing Supabase connection');
-    
-    // Check if we can connect to Supabase
-    const { data: tableList, error: tableError } = await supabase
-      .from('waitlist')
-      .select('*')
-      .limit(1);
-      
-    if (tableError) {
-      console.error('Supabase test error:', tableError);
-      return res.status(500).json({ 
-        error: 'Failed to connect to Supabase', 
-        details: tableError 
-      });
-    }
-    
-    // Try to get the table structure
-    const tableInfo = {
-      url: process.env.SUPABASE_URL,
-      keyPrefix: process.env.SUPABASE_ANON_KEY ? process.env.SUPABASE_ANON_KEY.substring(0, 5) + '...' : 'Not set',
-      tableExists: true,
-      sampleData: tableList,
-      message: 'Successfully connected to Supabase and found the waitlist table'
-    };
-    
-    return res.json(tableInfo);
-  } catch (err) {
-    console.error('Supabase test error:', err);
-    return res.status(500).json({ 
-      error: 'Error testing Supabase connection', 
-      details: String(err),
-      stack: err.stack 
-    });
   }
 });
 
