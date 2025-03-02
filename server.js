@@ -237,7 +237,7 @@ app.post('/api/waitlist', async (req, res) => {
       `;
       
       const emailData = await resend.emails.send({
-        from: 'Linkd Waitlist <founders@waitlist.linkd.inc>',
+        from: 'Linkd Waitlist <waitlist@linkd.inc>',
         to: userEmail,
         subject: `Welcome to Linkd's Waitlist, ${userName}!`,
         html: emailHtml,
@@ -390,7 +390,7 @@ app.post('/api/test/send-email', async (req, res) => {
     `;
     
     const emailData = await resend.emails.send({
-      from: 'Linkd Test <founders@waitlist.linkd.inc>',
+      from: 'Linkd Test <waitlist@linkd.inc>',
       to: email,
       subject: `Linkd Test Email`,
       html: emailHtml,
