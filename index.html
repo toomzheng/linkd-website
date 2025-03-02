@@ -175,7 +175,7 @@
             formMessage.className = 'form-message';
             
             // Ensure connection is available
-            if (!window.supabaseClient && !window.fetch) {
+            if (!window.fetch) {
                 formMessage.textContent = 'Unable to connect to server. Please refresh and try again.';
                 formMessage.className = 'form-message error';
                 return;
@@ -195,6 +195,8 @@
             const school = document.getElementById('school').value;
             const linkedin = document.getElementById('linkedin').value;
             
+            console.log('Submitting form data:', { name, email, school, linkedin });
+            
             try {
                 // Use the server-side endpoint to handle waitlist entries
                 const waitlistResponse = await fetch('/api/waitlist', {
@@ -210,9 +212,19 @@
                     })
                 });
                 
+                const waitlistData = await waitlistResponse.json();
+                
                 if (!waitlistResponse.ok) {
-                    const errorData = await waitlistResponse.json();
-                    throw new Error(errorData.error || 'Error saving your information');
+                    console.error('Waitlist submission error:', waitlistData);
+                    throw new Error(waitlistData.error || waitlistData.details || 'Error saving your information');
+                }
+                
+                console.log('Waitlist submission successful:', waitlistData);
+                
+                // Use the potentially modified email returned by the server
+                const finalEmail = waitlistData.email || email;
+                if (waitlistData.modified) {
+                    console.log(`Note: Your email was modified to ${finalEmail} to avoid duplication`);
                 }
                 
                 // Send confirmation email
@@ -224,29 +236,37 @@
                         },
                         body: JSON.stringify({
                             name,
-                            email,
+                            email: finalEmail, // Use the potentially modified email
                             school
                         })
                     });
                     
+                    const emailData = await emailResponse.json();
+                    
                     // Log any email issues but don't fail the form submission
                     if (!emailResponse.ok) {
                         console.warn('Email confirmation failed, but form was submitted');
-                        const emailError = await emailResponse.json();
-                        console.error('Email error:', emailError);
+                        console.error('Email error:', emailData);
+                    } else {
+                        console.log('Email sent successfully:', emailData);
                     }
                 } catch (emailError) {
                     console.error('Error sending confirmation email:', emailError);
                     // Continue with success message even if email fails
                 }
                 
-                formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school. Check your email for more details.';
+                // Customize success message if email was modified
+                if (waitlistData.modified) {
+                    formMessage.textContent = `Thanks! We've registered you with ${finalEmail}. We'll be in touch when we launch at your school.`;
+                } else {
+                    formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school. Check your email for more details.';
+                }
                 formMessage.className = 'form-message success';
                 document.getElementById('signupForm').reset();
                 
             } catch (error) {
                 console.error('Error submitting form:', error);
-                formMessage.textContent = 'Something went wrong. Please try again. ' + (error.message || '');
+                formMessage.textContent = 'Something went wrong: ' + (error.message || 'Unknown error');
                 formMessage.className = 'form-message error';
             }
         });
