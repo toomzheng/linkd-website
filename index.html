@@ -46,7 +46,7 @@
             <h2>About alumni.</h2>
             <p>We've began experimenting with this new medium by working with one of the most powerful forms of connections: <b>Alumni Networks.</b> Begin by searching for people who've experienced your education.</p>
             <p>Here's the schools where we've released our beta:</p>
-            <div class="schools-list" br style="margin-bottom: 42px;">
+            <div class="schools-list" br style="margin-bottom: 22px;">
                 <p>
                     <a href="https://upenn-frontend-production.up.railway.app/" target="_blank" rel="noopener noreferrer"><u>upenn</u></a>
                     | <a href="https://columbia.uselinkd.com/" target="_blank" rel="noopener noreferrer"><u>columbia</u></a>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="form-row">
                         <input type="text" id="school" name="school" placeholder="University/College name" required>
-                        <input type="text" id="linkedin" name="linkedin" placeholder="LinkedIn profile URL (optional)">
+                        <input type="text" id="linkedin" name="linkedin" placeholder="LinkedIn URL (optional)">
                     </div>
                     <button type="submit" class="submit-button">Submit Request</button>
                 </form>
@@ -81,6 +81,10 @@
     </div>
 
     <script>
+        /******************************************
+         * FUNCTIONAL CODE - CORE USER INTERACTIONS
+         ******************************************/
+        
         // Email copy functionality
         document.addEventListener('DOMContentLoaded', function() {
             const emailLink = document.querySelector('.copy-email');
@@ -129,6 +133,10 @@
             }
         }
         
+        /******************************************
+         * SECURITY & RATE LIMITING - ERROR PREVENTION
+         ******************************************/
+        
         // Rate limiting functionality
         const RATE_LIMIT = 14; // max submissions per hour
         const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -167,6 +175,10 @@
             }
         }
         
+        /******************************************
+         * FUNCTIONAL CODE - FORM HANDLING & SUBMISSION
+         ******************************************/
+        
         // Handle form submission
         document.getElementById('signupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -174,6 +186,7 @@
             formMessage.textContent = 'Submitting...';
             formMessage.className = 'form-message';
             
+            /*** ERROR HANDLING - CONNECTION CHECK ***/
             // Ensure connection is available
             if (!window.fetch) {
                 formMessage.textContent = 'Unable to connect to server. Please refresh and try again.';
@@ -181,6 +194,7 @@
                 return;
             }
             
+            /*** ERROR HANDLING - RATE LIMIT CHECK ***/
             // Check rate limit
             const rateLimitCheck = checkRateLimit();
             if (!rateLimitCheck.allowed) {
@@ -199,7 +213,7 @@
             
             try {
                 // Use the server-side endpoint to handle waitlist entries
-                const waitlistResponse = await fetch('/api/waitlist', {
+                const response = await fetch('/api/waitlist', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -212,72 +226,61 @@
                     })
                 });
                 
-                const waitlistData = await waitlistResponse.json();
-                
-                if (!waitlistResponse.ok) {
-                    console.error('Waitlist submission error:', waitlistData);
-                    throw new Error(waitlistData.error || waitlistData.details || 'Error saving your information');
-                }
-                
-                console.log('Waitlist submission successful:', waitlistData);
-                
-                // Use the potentially modified email returned by the server
-                const finalEmail = waitlistData.email || email;
-                if (waitlistData.modified) {
-                    console.log(`Note: Your email was modified to ${finalEmail} to avoid duplication`);
-                }
-                
-                // Send confirmation email
-                try {
-                    const emailResponse = await fetch('/api/send-confirmation', {
+                const result = await response.json();
+                if (result.success) {
+                    // Send confirmation email using the original email
+                    const confirmationResponse = await fetch('/api/send-confirmation', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
                             name,
-                            email: finalEmail, // Use the potentially modified email
-                            school
+                            email,
+                            school,
                         })
                     });
                     
-                    const emailData = await emailResponse.json();
+                    const confirmationData = await confirmationResponse.json();
                     
+                    /*** ERROR HANDLING - EMAIL CONFIRMATION FAILURE ***/
                     // Log any email issues but don't fail the form submission
-                    if (!emailResponse.ok) {
+                    if (!confirmationResponse.ok) {
                         console.warn('Email confirmation failed, but form was submitted');
-                        console.error('Email error:', emailData);
+                        console.error('Email error:', confirmationData);
                     } else {
-                        console.log('Email sent successfully:', emailData);
+                        console.log('Email sent successfully:', confirmationData);
                     }
-                } catch (emailError) {
-                    console.error('Error sending confirmation email:', emailError);
-                    // Continue with success message even if email fails
-                }
-                
-                // Customize success message if email was modified
-                if (waitlistData.modified) {
-                    formMessage.textContent = `Thanks! We've registered you with ${finalEmail}. We'll be in touch when we launch at your school.`;
+                    
+                    // Customize success message if email was modified
+                    if (result.modified) {
+                        formMessage.textContent = `Thanks! We've registered you with ${email}. We'll be in touch when we launch at your school.`;
+                    } else {
+                        formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school. Check your email for more details.';
+                    }
+                    
+                    /*** ERROR HANDLING - EMAIL SENDING FAILURE MESSAGE ***/
+                    // Add note about email if it failed but form submitted
+                    const emailFailed = confirmationResponse && !confirmationResponse.ok;
+                    if (emailFailed) {
+                        const noteElem = document.createElement('p');
+                        noteElem.className = 'email-note';
+                        noteElem.textContent = '(Note: We had trouble sending your confirmation email, but your request was saved.)';
+                        noteElem.style.fontSize = '0.85em';
+                        noteElem.style.marginTop = '0.5em';
+                        noteElem.style.color = '#666';
+                        formMessage.appendChild(noteElem);
+                    }
+                    
+                    formMessage.className = 'form-message success';
+                    document.getElementById('signupForm').reset();
                 } else {
-                    formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school. Check your email for more details.';
+                    /*** ERROR HANDLING - SERVER RESPONSE ERROR ***/
+                    console.error('Waitlist submission error:', result);
+                    throw new Error(result.error || result.details || 'Error saving your information');
                 }
-                
-                // Add note about email if it failed but form submitted
-                const emailFailed = emailResponse && !emailResponse.ok;
-                if (emailFailed) {
-                    const noteElem = document.createElement('p');
-                    noteElem.className = 'email-note';
-                    noteElem.textContent = '(Note: We had trouble sending your confirmation email, but your request was saved.)';
-                    noteElem.style.fontSize = '0.85em';
-                    noteElem.style.marginTop = '0.5em';
-                    noteElem.style.color = '#666';
-                    formMessage.appendChild(noteElem);
-                }
-                
-                formMessage.className = 'form-message success';
-                document.getElementById('signupForm').reset();
-                
             } catch (error) {
+                /*** ERROR HANDLING - GENERAL FORM SUBMISSION ERROR ***/
                 console.error('Error submitting form:', error);
                 formMessage.textContent = 'Something went wrong: ' + (error.message || 'Unknown error');
                 formMessage.className = 'form-message error';

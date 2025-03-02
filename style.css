@@ -130,9 +130,8 @@ a:hover {
 .signup-section {
     margin-top: 1rem;
     padding: 0rem;
-    background: rgba(0, 0, 0, 0.02);
     border-radius: 8px;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .signup-form {
@@ -150,7 +149,7 @@ a:hover {
 .form-row input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     font-family: 'Inconsolata', monospace;
     font-size: 0.9rem;
@@ -198,10 +197,6 @@ a:hover {
 
 .form-message.error {
     color: #c62828;
-    font-weight: 500;
-    padding: 6px 10px;
-    background-color: rgba(198, 40, 40, 0.08);
-    border-radius: 4px;
 }
 
 @media (max-width: 600px) {
