@@ -25,7 +25,7 @@
             <br>
             <h1>Hey! Welcome to Linkd.</h1>
             <p class="date">February 27, 2025</p>
-            <p class="announcement"><em>update: we are backed by <span class="highlight-yc">Y Combinator</span> as a part of their X25 batch.</em></p>
+            <p class="announcement"><em>update: we are backed by <span class="highlight-yc"><a href="https://www.ycombinator.com/"">Y Combinator</a></span> as a part of their X25 batch.</em></p>
             <h2>How do you discover people?</h2>
             
             <p>We're here to find out.</p>
@@ -228,51 +228,18 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    // Send confirmation email using the original email
-                    const confirmationResponse = await fetch('/api/send-confirmation', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name,
-                            email,
-                            school,
-                        })
-                    });
-                    
-                    const confirmationData = await confirmationResponse.json();
-                    
-                    /*** ERROR HANDLING - EMAIL CONFIRMATION FAILURE ***/
-                    // Log any email issues but don't fail the form submission
-                    if (!confirmationResponse.ok) {
-                        console.warn('Email confirmation failed, but form was submitted');
-                        console.error('Email error:', confirmationData);
-                    } else {
-                        console.log('Email sent successfully:', confirmationData);
-                    }
+                    // Removed confirmation email code
                     
                     // Customize success message if email was modified
                     if (result.modified) {
-                        formMessage.textContent = `Thanks! We've registered you with ${email}. We'll be in touch when we launch at your school.`;
+                        formMessage.textContent = `Thanks! We've registered you with ${result.email}. We'll be in touch when we launch at your school.`;
                     } else {
-                        formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school. Check your email for more details.';
+                        formMessage.textContent = 'Thanks! We\'ll be in touch when we launch at your school.';
                     }
                     
-                    /*** ERROR HANDLING - EMAIL SENDING FAILURE MESSAGE ***/
-                    // Add note about email if it failed but form submitted
-                    const emailFailed = confirmationResponse && !confirmationResponse.ok;
-                    if (emailFailed) {
-                        const noteElem = document.createElement('p');
-                        noteElem.className = 'email-note';
-                        noteElem.textContent = '(Note: We had trouble sending your confirmation email, but your request was saved.)';
-                        noteElem.style.fontSize = '0.85em';
-                        noteElem.style.marginTop = '0.5em';
-                        noteElem.style.color = '#666';
-                        formMessage.appendChild(noteElem);
-                    }
-                    
-                    formMessage.className = 'form-message success';
+                    // Removed email failure handling
+
+                    formMessage.className = 'success';
                     document.getElementById('signupForm').reset();
                 } else {
                     /*** ERROR HANDLING - SERVER RESPONSE ERROR ***/

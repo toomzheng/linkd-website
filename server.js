@@ -1,13 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const { Resend } = require('resend');
 const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Initialize Supabase on server side for handling duplicates
 const supabase = createClient(
@@ -65,20 +61,53 @@ app.post('/api/waitlist', async (req, res) => {
   }
 
   try {
+    // Check for existing emails with the same base part (before any pipe character)
+    const baseEmail = email.split('|')[0]; // Get the base email part
+    
     // Use Promise.race to apply a timeout to the database operation
     const result = await Promise.race([
-      supabase.from('waitlist').select('*').eq('email', email),
+      supabase.from('waitlist').select('*').eq('email', baseEmail),
       timeoutPromise(5000, 'Database query timed out')
     ]);
 
-    // Check for existing email
+    let emailToInsert = email;
+    let modified = false;
+
+    // If there's an existing entry with the same base email, add a unique suffix
     if (result.data && result.data.length > 0) {
-      return res.status(409).json({ error: 'Email already registered' });
+      // Get all emails that start with this base email to determine the next number
+      const similarEmailsResult = await Promise.race([
+        supabase.from('waitlist').select('email').like('email', `${baseEmail}|%`),
+        timeoutPromise(5000, 'Similar emails query timed out')
+      ]);
+      
+      let maxNum = 0;
+      if (similarEmailsResult.data && similarEmailsResult.data.length > 0) {
+        // Find the highest number suffix used so far
+        similarEmailsResult.data.forEach(entry => {
+          const parts = entry.email.split('|');
+          if (parts.length > 1) {
+            const num = parseInt(parts[1], 10);
+            if (!isNaN(num) && num > maxNum) {
+              maxNum = num;
+            }
+          }
+        });
+      }
+      
+      // Use the next number in sequence
+      emailToInsert = `${baseEmail}|${maxNum + 1}`;
+      modified = true;
     }
 
-    // If no existing email, insert the new one with Promise.race for timeout
+    // Insert the email (either original or with suffix)
     const insertResult = await Promise.race([
-      supabase.from('waitlist').insert([{ email, name, school, created_at: new Date() }]),
+      supabase.from('waitlist').insert([{ 
+        email: emailToInsert, 
+        name, 
+        school, 
+        created_at: new Date() 
+      }]),
       timeoutPromise(5000, 'Database insert timed out')
     ]);
 
@@ -88,64 +117,14 @@ app.post('/api/waitlist', async (req, res) => {
       return res.status(500).json({ error: 'Failed to register email' });
     }
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ 
+      success: true,
+      modified,
+      email: emailToInsert
+    });
   } catch (error) {
     console.error('Waitlist API error:', error);
     res.status(500).json({ error: 'Server error processing request', details: error.message });
-  }
-});
-
-// Create confirmation email endpoint
-app.post('/api/send-confirmation', async (req, res) => {
-  const { email, name } = req.body;
-  
-  // Validate input
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required' });
-  }
-  
-  try {
-    // Convert email to lowercase for consistency
-    const sanitizedEmail = email.toLowerCase().trim();
-    let domain = sanitizedEmail.split('@')[1];
-    
-    // Determine email template based on domain
-    let templateHtml;
-    if (domain === 'berkeley.edu' || domain === 'stanford.edu') {
-      const schoolName = domain === 'berkeley.edu' ? 'UC Berkeley' : 'Stanford';
-      templateHtml = `<p>Hi ${name || 'there'},</p>
-        <p>Thanks for joining the Linkd waitlist! We're building a professional community exclusively for ${schoolName} students.</p>
-        <p>We'll let you know as soon as we launch.</p>
-        <p>Best,<br>Linkd Team</p>`;
-    } else {
-      templateHtml = `<p>Hi ${name || 'there'},</p>
-        <p>Thanks for joining the Linkd waitlist! We're building a professional community exclusively for students.</p>
-        <p>We'll let you know as soon as we launch at your school.</p>
-        <p>Best,<br>Linkd Team</p>`;
-    }
-    
-    // Send email with timeout
-    const emailResult = await Promise.race([
-      resend.emails.send({
-        from: 'Linkd <waitlist@linkd.inc>',
-        to: sanitizedEmail,
-        subject: 'Welcome to the Linkd Waitlist',
-        html: templateHtml
-      }),
-      timeoutPromise(4000, 'Email sending timed out')
-    ]);
-    
-    if (emailResult.error) {
-      console.error('Email send error:', emailResult.error);
-      return res.status(500).json({ error: 'Failed to send confirmation email' });
-    }
-    
-    res.status(200).json({ success: true });
-  } catch (error) {
-    console.error('Email API error:', error);
-    // Still return success to the client if the email fails
-    // This prevents blocking the user experience while still logging the error
-    res.status(200).json({ success: true, emailSent: false });
   }
 });
 
@@ -171,50 +150,8 @@ const validateConnections = async () => {
     results.push({ service: 'supabase', status: 'error', message: error.message });
   }
   
-  // Check Resend configuration
-  try {
-    // Just validate that the key is present, don't make an actual API call
-    if (!process.env.RESEND_API_KEY) {
-      throw new Error('Resend API key is missing');
-    }
-    
-    console.log('✅ Resend configuration loaded');
-    results.push({ service: 'resend', status: 'ok' });
-  } catch (error) {
-    console.error('❌ Resend configuration error:', error.message);
-    results.push({ service: 'resend', status: 'error', message: error.message });
-  }
-  
   return results;
 };
-
-// TESTING ENDPOINT - Add a test endpoint for Resend
-app.get('/api/test-email', async (req, res) => {
-  try {
-    // Use the timeout pattern for the test email as well
-    const result = await Promise.race([
-      resend.emails.send({
-        from: 'Linkd <test@linkd.inc>',
-        to: 'test@example.com',
-        subject: 'Test Email',
-        html: '<p>This is a test email to verify that the service is working.</p>'
-      }),
-      timeoutPromise(4000, 'Test email sending timed out')
-    ]);
-    
-    if (result.error) {
-      throw new Error(`Failed to send test email: ${result.error.message}`);
-    }
-    
-    res.json({ success: true, message: 'Test email sent', id: result.id });
-  } catch (error) {
-    console.error('Test email error:', error);
-    res.status(500).json({ 
-      error: 'Failed to send test email', 
-      message: error.message 
-    });
-  }
-});
 
 // TESTING ENDPOINT - Diagnostic endpoint to verify env vars
 app.get('/api/diagnose', (req, res) => {
@@ -222,7 +159,6 @@ app.get('/api/diagnose', (req, res) => {
     const diagnosis = {
       environment: process.env.NODE_ENV || 'not set',
       supabase: process.env.SUPABASE_URL ? '✓ configured' : '✗ missing',
-      resend: process.env.RESEND_API_KEY ? '✓ configured' : '✗ missing',
       port: PORT.toString()
     };
     
