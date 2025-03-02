@@ -174,8 +174,8 @@
             formMessage.textContent = 'Submitting...';
             formMessage.className = 'form-message';
             
-            // Ensure Supabase is initialized
-            if (!window.supabaseClient) {
+            // Ensure connection is available
+            if (!window.supabaseClient && !window.fetch) {
                 formMessage.textContent = 'Unable to connect to server. Please refresh and try again.';
                 formMessage.className = 'form-message error';
                 return;
@@ -196,29 +196,28 @@
             const linkedin = document.getElementById('linkedin').value;
             
             try {
-                // Insert into Supabase
-                const { data, error } = await window.supabaseClient
-                    .from('waitlist')
-                    .insert([{ 
+                // Use the server-side endpoint to handle waitlist entries
+                const waitlistResponse = await fetch('/api/waitlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
                         name,
                         email,
                         school,
-                        linkedin,
-                        created_at: new Date()
-                    }]);
+                        linkedin
+                    })
+                });
                 
-                if (error) {
-                    console.error('Supabase error:', error);
-                    // Still allowing duplicate emails by not specifically handling the 23505 error
-                    // Just throw a generic error for other issues
-                    if (error.code !== '23505') {
-                        throw error;
-                    }
+                if (!waitlistResponse.ok) {
+                    const errorData = await waitlistResponse.json();
+                    throw new Error(errorData.error || 'Error saving your information');
                 }
                 
                 // Send confirmation email
                 try {
-                    await fetch('/api/send-confirmation', {
+                    const emailResponse = await fetch('/api/send-confirmation', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -229,8 +228,13 @@
                             school
                         })
                     });
-                    // We don't need to check the response - if it fails, we still want to show success
-                    // for the form submission, and we log errors server-side
+                    
+                    // Log any email issues but don't fail the form submission
+                    if (!emailResponse.ok) {
+                        console.warn('Email confirmation failed, but form was submitted');
+                        const emailError = await emailResponse.json();
+                        console.error('Email error:', emailError);
+                    }
                 } catch (emailError) {
                     console.error('Error sending confirmation email:', emailError);
                     // Continue with success message even if email fails
@@ -242,9 +246,6 @@
                 
             } catch (error) {
                 console.error('Error submitting form:', error);
-                
-                // We're no longer checking for duplicate emails - allow them through
-                // Just handle other unexpected errors
                 formMessage.textContent = 'Something went wrong. Please try again. ' + (error.message || '');
                 formMessage.className = 'form-message error';
             }
