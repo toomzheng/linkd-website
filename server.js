@@ -205,8 +205,6 @@ app.post('/api/waitlist', async (req, res) => {
         </head>
         <body>
           <div class="container">
-            <h2>Thanks for your interest in Linkd, ${firstName}!</h2>
-            
             <p>We've received your request to bring Linkd to ${schoolName}. We'll keep you updated on our progress.</p>
             
             <p>In the meantime, check out our latest release at <a href="https://stanford.uselinkd.com/" target="_blank">Stanford</a> and try searching for anything that interests you.</p>
@@ -235,7 +233,7 @@ app.post('/api/waitlist', async (req, res) => {
       const emailData = await resend.emails.send({
         from: 'Linkd <founders@waitlist.linkd.inc>',
         to: userEmail,
-        subject: `Your request for ${schoolName}`,
+        subject: `Thanks for your interest in Linkd for ${schoolName}, ${firstName}!`,
         html: emailHtml,
       });
       
@@ -444,8 +442,6 @@ app.post('/api/test/send-email', async (req, res) => {
         <div class="container">
           <div class="test-banner">TEST EMAIL - PLEASE IGNORE</div>
           
-          <h2>Thanks for your interest in Linkd, ${firstName}!</h2>
-          
           <p>We've received your request to bring Linkd to ${schoolName}. We'll keep you updated on our progress.</p>
           
           <p>In the meantime, check out our latest release at <a href="https://stanford.uselinkd.com/" target="_blank">Stanford</a> and try searching for anything that interests you.</p>
@@ -474,7 +470,7 @@ app.post('/api/test/send-email', async (req, res) => {
     const emailData = await resend.emails.send({
       from: 'Linkd Test <founders@waitlist.linkd.inc>',
       to: email,
-      subject: `Your request for ${schoolName}`,
+      subject: `Thanks for your interest in Linkd for ${schoolName}, ${firstName}!`,
       html: emailHtml,
     });
     
