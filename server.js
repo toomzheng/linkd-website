@@ -138,7 +138,7 @@ app.post('/api/waitlist', async (req, res) => {
           <title>Thanks for your interest in Linkd</title>
           <style>
             body {
-              font-family: 'Inconsolata', monospace;
+              font-family: 'Inconsolata', 'Courier New', Courier, monospace;
               margin: 0;
               padding: 0;
               background-color: #f9f9f9;
@@ -146,23 +146,11 @@ app.post('/api/waitlist', async (req, res) => {
               line-height: 1.5;
             }
             .container {
-              max-width: 600px;
-              margin: 0 auto;
-              padding: 1.5rem 0.8rem;
-            }
-            @font-face {
-              font-family: 'Inconsolata';
-              font-style: normal;
-              font-weight: 400;
-              src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp1U8WR32kg.woff2) format('woff2');
-            }
-            @font-face {
-              font-family: 'Inconsolata';
-              font-style: normal;
-              font-weight: 600;
-              src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp7c8WR32kg.woff2) format('woff2');
+              padding: 1.5rem;
+              margin: 0; /* Remove auto margins */
             }
             h2 {
+              font-family: 'Inconsolata', 'Courier New', Courier, monospace;
               font-weight: 600;
               font-size: 1.8rem;
               margin: 0 0 0.4rem 0;
@@ -170,9 +158,11 @@ app.post('/api/waitlist', async (req, res) => {
               text-align: left;
             }
             p {
+              font-family: 'Inconsolata', 'Courier New', Courier, monospace;
               margin: 0.66rem 0;
               font-size: 1rem;
               text-align: left;
+              color: #1a1a1a; /* Change to black instead of purple */
             }
             a {
               color: #0075ff;
@@ -182,18 +172,30 @@ app.post('/api/waitlist', async (req, res) => {
               text-decoration: underline;
             }
             .signature {
+              font-family: 'Inconsolata', 'Courier New', Courier, monospace;
               margin-top: 1.5rem;
               margin-bottom: 0.5rem;
               text-align: left;
+              color: #1a1a1a; /* Change to black instead of purple */
             }
             .schools-list {
+              font-family: 'Inconsolata', 'Courier New', Courier, monospace;
               text-align: left;
               margin: 0.85rem 0;
               padding: 0;
+              color: #1a1a1a; /* Change to black instead of purple */
+            }
+            .footer-text {
+              font-family: 'Inconsolata', 'Courier New', Courier, monospace;
+              font-size: 0.8rem; 
+              color: #666;
+              margin-top: 1.5rem;
+              border-top: 1px solid #eee;
+              padding-top: 1rem;
             }
             @media (max-width: 600px) {
               .container {
-                padding: 1.75rem 0.9rem;
+                padding: 1.5rem;
               }
               h2 {
                 font-size: 1.6rem;
@@ -221,7 +223,7 @@ app.post('/api/waitlist', async (req, res) => {
             
             <p class="signature">- Eric & Tom</p>
             
-            <p style="font-size: 0.8rem; color: #666; margin-top: 1.5rem; border-top: 1px solid #eee; padding-top: 1rem;">
+            <p class="footer-text">
               This email was sent to ${userEmail} because you signed up for the Linkd waitlist.
             </p>
           </div>
@@ -366,7 +368,7 @@ app.post('/api/test/send-email', async (req, res) => {
         <title>Test Email from Linkd</title>
         <style>
           body {
-            font-family: 'Inconsolata', monospace;
+            font-family: 'Inconsolata', 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
@@ -374,21 +376,8 @@ app.post('/api/test/send-email', async (req, res) => {
             line-height: 1.5;
           }
           .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 1.5rem 0.8rem;
-          }
-          @font-face {
-            font-family: 'Inconsolata';
-            font-style: normal;
-            font-weight: 400;
-            src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp1U8WR32kg.woff2) format('woff2');
-          }
-          @font-face {
-            font-family: 'Inconsolata';
-            font-style: normal;
-            font-weight: 600;
-            src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp7c8WR32kg.woff2) format('woff2');
+            padding: 1.5rem;
+            margin: 0; /* Remove auto margins */
           }
           .test-banner { 
             background-color: #ffeb3b; 
@@ -399,6 +388,7 @@ app.post('/api/test/send-email', async (req, res) => {
             font-weight: bold;
           }
           h2 {
+            font-family: 'Inconsolata', 'Courier New', Courier, monospace;
             font-weight: 600;
             font-size: 1.8rem;
             margin: 0 0 0.4rem 0;
@@ -406,9 +396,11 @@ app.post('/api/test/send-email', async (req, res) => {
             text-align: left;
           }
           p {
+            font-family: 'Inconsolata', 'Courier New', Courier, monospace;
             margin: 0.66rem 0;
             font-size: 1rem;
             text-align: left;
+            color: #1a1a1a; /* Change to black instead of purple */
           }
           a {
             color: #0075ff;
@@ -418,18 +410,28 @@ app.post('/api/test/send-email', async (req, res) => {
             text-decoration: underline;
           }
           .signature {
+            font-family: 'Inconsolata', 'Courier New', Courier, monospace;
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
             text-align: left;
+            color: #1a1a1a; /* Change to black instead of purple */
           }
           .schools-list {
+            font-family: 'Inconsolata', 'Courier New', Courier, monospace;
             text-align: left;
             margin: 0.85rem 0;
             padding: 0;
+            color: #1a1a1a; /* Change to black instead of purple */
+          }
+          .footer-text {
+            font-family: 'Inconsolata', 'Courier New', Courier, monospace;
+            font-size: 0.8rem; 
+            color: #666;
+            margin-top: 1.5rem;
           }
           @media (max-width: 600px) {
             .container {
-              padding: 1.75rem 0.9rem;
+              padding: 1.5rem;
             }
             h2 {
               font-size: 1.6rem;
@@ -447,7 +449,7 @@ app.post('/api/test/send-email', async (req, res) => {
           
           <p>In the meantime, check out our latest release at <a href="https://stanford.uselinkd.com/" target="_blank">Stanford</a> and try searching for anything that interests you.</p>
           
-          <p>Our search algorithm is designed to help you discover people through shared experiences - we'd love to hear what you think! Please feel free to reply to this email with feedback.</p>
+          <p>Our search algorithm is designed to help you discover people through shared experiences - we'd love to hear what you think! Please feel free to reply to this email with feedback or questions.</p>
           
           <div class="schools-list">
             <a href="https://upenn-frontend-production.up.railway.app/">UPenn</a> | 
@@ -459,7 +461,7 @@ app.post('/api/test/send-email', async (req, res) => {
           
           <p class="signature">- Eric & Tom</p>
           
-          <p style="font-size: 0.8rem; color: #666; margin-top: 1.5rem;">
+          <p class="footer-text">
             Test completed at: ${new Date().toISOString()}
           </p>
         </div>
