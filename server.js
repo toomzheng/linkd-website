@@ -193,47 +193,6 @@ app.post('/api/waitlist', async (req, res) => {
               border-top: 1px solid #eee;
               padding-top: 1rem;
             }
-            /* School colors */
-            .school-upenn {
-              background: linear-gradient(to right, #990000 50%, #011F5B 50%);
-              -webkit-background-clip: text;
-              background-clip: text;
-              color: transparent !important;
-              font-weight: 600;
-              text-decoration-color: #990000;
-            }
-            .school-upenn u {
-              text-decoration: underline;
-              text-decoration-color: inherit;
-            }
-            .school-utoronto {
-              color: #013482 !important; /* Dark blue */
-              font-weight: 600;
-            }
-            .school-stanford {
-              color: #8C1515 !important; /* Cardinal red */
-              font-weight: 600;
-            }
-            .school-columbia {
-              color: #75AADB !important; /* Light blue */
-              font-weight: 600;
-            }
-            .school-yale {
-              color: #254d94 !important; /* Yale blue */
-              font-weight: 600;
-            }
-            .school-berkeley {
-              background: linear-gradient(to right, #003262 50%, #FDB515 50%); /* Blue and Gold */
-              -webkit-background-clip: text;
-              background-clip: text;
-              color: transparent !important;
-              font-weight: 600;
-              text-decoration-color: #003262;
-            }
-            .school-berkeley u {
-              text-decoration: underline;
-              text-decoration-color: inherit;
-            }
             @media (max-width: 600px) {
               .container {
                 padding: 1.5rem;
@@ -255,12 +214,11 @@ app.post('/api/waitlist', async (req, res) => {
             <p>Our search algorithm is designed to help you discover people through shared experiences - we'd love to hear what you think! Please feel free to reply to this email with feedback.</p>
             
             <div class="schools-list">
-              <a href="https://upenn-frontend-production.up.railway.app/" class="school-upenn"><u>upenn</u></a> | 
-              <a href="https://utoronto.uselinkd.com/" class="school-utoronto"><u>utoronto</u></a> | 
-              <a href="https://columbia.uselinkd.com/" class="school-columbia"><u>columbia</u></a> | 
-              <a href="https://yale.uselinkd.com/" class="school-yale"><u>yale</u></a> |
-              <a href="https://stanford.uselinkd.com/" class="school-stanford"><u>stanford</u></a> |
-              <span class="school-berkeley"><u>berkeley</u></span><i>(next!)</i>
+              <a href="https://upenn-frontend-production.up.railway.app/"><u>upenn</u></a> | 
+              <a href="https://utoronto.uselinkd.com/"><u>utoronto</u></a> | 
+              <a href="https://columbia.uselinkd.com/"><u>columbia</u></a> | 
+              <a href="https://yale.uselinkd.com/"><u>yale</u></a> |
+              <a href="https://stanford.uselinkd.com/"><u>stanford</u></a>
             </div>
             
             <p class="signature">- <a href="https://www.linkedin.com/in/eric-mao/" target="_blank" rel="noopener noreferrer">Eric</a> & 
@@ -472,47 +430,6 @@ app.post('/api/test/send-email', async (req, res) => {
             color: #666;
             margin-top: 1.5rem;
           }
-          /* School colors */
-          .school-upenn {
-            background: linear-gradient(to right, #990000 50%, #011F5B 50%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent !important;
-            font-weight: 600;
-            text-decoration-color: #990000;
-          }
-          .school-upenn u {
-            text-decoration: underline;
-            text-decoration-color: inherit;
-          }
-          .school-utoronto {
-            color: #013482 !important; /* Dark blue */
-            font-weight: 600;
-          }
-          .school-stanford {
-            color: #8C1515 !important; /* Cardinal red */
-            font-weight: 600;
-          }
-          .school-columbia {
-            color: #75AADB !important; /* Light blue */
-            font-weight: 600;
-          }
-          .school-yale {
-            color: #254d94 !important; /* Yale blue */
-            font-weight: 600;
-          }
-          .school-berkeley {
-            background: linear-gradient(to right, #003262 50%, #FDB515 50%); /* Blue and Gold */
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent !important;
-            font-weight: 600;
-            text-decoration-color: #003262;
-          }
-          .school-berkeley u {
-            text-decoration: underline;
-            text-decoration-color: inherit;
-          }
           @media (max-width: 600px) {
             .container {
               padding: 1.5rem;
@@ -536,12 +453,12 @@ app.post('/api/test/send-email', async (req, res) => {
           <p>Our search algorithm is designed to help you discover people through shared experiences - we'd love to hear what you think! Please feel free to reply to this email with feedback or questions.</p>
           
           <div class="schools-list">
-            <a href="https://upenn-frontend-production.up.railway.app/" class="school-upenn"><u>upenn</u></a> | 
-            <a href="https://utoronto.uselinkd.com/" class="school-utoronto"><u>utoronto</u></a> | 
-            <a href="https://columbia.uselinkd.com/" class="school-columbia"><u>columbia</u></a> | 
-            <a href="https://yale.uselinkd.com/" class="school-yale"><u>yale</u></a> |
-            <a href="https://stanford.uselinkd.com/" class="school-stanford"><u>stanford</u></a> |
-            <span class="school-berkeley"><u>berkeley</u></span><i>(next!)</i>
+            <a href="https://upenn-frontend-production.up.railway.app/"><u>upenn</u></a> | 
+            <a href="https://utoronto.uselinkd.com/"><u>utoronto</u></a> | 
+            <a href="https://columbia.uselinkd.com/"><u>columbia</u></a> | 
+            <a href="https://yale.uselinkd.com/"><u>yale</u></a> |
+            <a href="https://stanford.uselinkd.com/"><u>stanford</u></a> |
+            <span><u>berkeley</u></span><i>(next!)</i>
           </div>
           
           <p class="signature">- Eric & Tom</p>
