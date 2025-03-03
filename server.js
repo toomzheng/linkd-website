@@ -150,15 +150,29 @@ app.post('/api/waitlist', async (req, res) => {
               margin: 0 auto;
               padding: 1.5rem 0.8rem;
             }
+            @font-face {
+              font-family: 'Inconsolata';
+              font-style: normal;
+              font-weight: 400;
+              src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp1U8WR32kg.woff2) format('woff2');
+            }
+            @font-face {
+              font-family: 'Inconsolata';
+              font-style: normal;
+              font-weight: 600;
+              src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp7c8WR32kg.woff2) format('woff2');
+            }
             h2 {
               font-weight: 600;
-              font-size: 1.5rem;
-              margin: 0 0 1rem 0;
+              font-size: 1.8rem;
+              margin: 0 0 0.4rem 0;
               color: #000;
+              text-align: left;
             }
             p {
               margin: 0.66rem 0;
               font-size: 1rem;
+              text-align: left;
             }
             a {
               color: #0075ff;
@@ -167,35 +181,29 @@ app.post('/api/waitlist', async (req, res) => {
             a:hover {
               text-decoration: underline;
             }
-            .highlight {
-              color: #ff6601;
-              font-weight: 500;
-            }
             .signature {
               margin-top: 1.5rem;
               margin-bottom: 0.5rem;
+              text-align: left;
             }
             .schools-list {
-              text-align: center;
-              margin: 1.5rem 0;
-              padding: 0.5rem;
-              background-color: #f5f5f5;
-              border-radius: 4px;
-              font-size: 0.95rem;
+              text-align: left;
+              margin: 0.85rem 0;
+              padding: 0;
             }
             @media (max-width: 600px) {
               .container {
-                padding: 1rem 0.7rem;
+                padding: 1.75rem 0.9rem;
               }
               h2 {
-                font-size: 1.3rem;
+                font-size: 1.6rem;
               }
             }
           </style>
         </head>
         <body>
           <div class="container">
-            <h2>Thanks for your interest in <span class="highlight">Linkd</span>, ${firstName}!</h2>
+            <h2>Thanks for your interest in Linkd, ${firstName}!</h2>
             
             <p>We've received your request to bring Linkd to ${schoolName}. We'll keep you updated on our progress.</p>
             
@@ -370,6 +378,18 @@ app.post('/api/test/send-email', async (req, res) => {
             margin: 0 auto;
             padding: 1.5rem 0.8rem;
           }
+          @font-face {
+            font-family: 'Inconsolata';
+            font-style: normal;
+            font-weight: 400;
+            src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp1U8WR32kg.woff2) format('woff2');
+          }
+          @font-face {
+            font-family: 'Inconsolata';
+            font-style: normal;
+            font-weight: 600;
+            src: url(https://fonts.gstatic.com/s/inconsolata/v31/QldgNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLYxYWI2qfdm7Lpp7c8WR32kg.woff2) format('woff2');
+          }
           .test-banner { 
             background-color: #ffeb3b; 
             padding: 10px; 
@@ -380,13 +400,15 @@ app.post('/api/test/send-email', async (req, res) => {
           }
           h2 {
             font-weight: 600;
-            font-size: 1.5rem;
-            margin: 0 0 1rem 0;
+            font-size: 1.8rem;
+            margin: 0 0 0.4rem 0;
             color: #000;
+            text-align: left;
           }
           p {
             margin: 0.66rem 0;
             font-size: 1rem;
+            text-align: left;
           }
           a {
             color: #0075ff;
@@ -395,21 +417,23 @@ app.post('/api/test/send-email', async (req, res) => {
           a:hover {
             text-decoration: underline;
           }
-          .highlight {
-            color: #ff6601;
-            font-weight: 500;
-          }
           .signature {
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
+            text-align: left;
           }
           .schools-list {
-            text-align: center;
-            margin: 1.5rem 0;
-            padding: 0.5rem;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-            font-size: 0.95rem;
+            text-align: left;
+            margin: 0.85rem 0;
+            padding: 0;
+          }
+          @media (max-width: 600px) {
+            .container {
+              padding: 1.75rem 0.9rem;
+            }
+            h2 {
+              font-size: 1.6rem;
+            }
           }
         </style>
       </head>
@@ -417,7 +441,7 @@ app.post('/api/test/send-email', async (req, res) => {
         <div class="container">
           <div class="test-banner">TEST EMAIL - PLEASE IGNORE</div>
           
-          <h2>Thanks for your interest in <span class="highlight">Linkd</span>, ${firstName}!</h2>
+          <h2>Thanks for your interest in Linkd, ${firstName}!</h2>
           
           <p>We've received your request to bring Linkd to ${schoolName}. We'll keep you updated on our progress.</p>
           
