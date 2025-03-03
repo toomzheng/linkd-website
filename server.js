@@ -124,6 +124,7 @@ app.post('/api/waitlist', async (req, res) => {
     // Send confirmation email via Resend
     try {
       const userName = name || 'there';
+      const firstName = name ? name.split(' ')[0] : 'there';
       const userEmail = baseEmail; // Use the original email without any suffix
       const schoolName = school || 'your school';
       
@@ -134,89 +135,75 @@ app.post('/api/waitlist', async (req, res) => {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Welcome to Linkd Waitlist</title>
+          <title>Thanks for your interest in Linkd</title>
           <style>
             body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-              line-height: 1.5;
-              color: #333;
-              max-width: 600px;
-              margin: 0 auto;
-              padding: 20px;
+              font-family: 'Inconsolata', monospace;
+              margin: 0;
+              padding: 0;
               background-color: #f9f9f9;
+              color: #1a1a1a;
+              line-height: 1.5;
             }
             .container {
-              background-color: #ffffff;
-              border-radius: 8px;
-              padding: 30px;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 1.5rem 0.8rem;
             }
-            .header {
-              margin-bottom: 25px;
-              text-align: center;
-            }
-            .footer {
-              margin-top: 30px;
-              font-size: 12px;
-              color: #666;
-              text-align: center;
-              padding-top: 15px;
-              border-top: 1px solid #eeeeee;
-            }
-            h1 {
+            h2 {
+              font-weight: 600;
+              font-size: 1.5rem;
+              margin: 0 0 1rem 0;
               color: #000;
-              font-size: 24px;
-              margin-bottom: 15px;
             }
             p {
-              margin-bottom: 15px;
+              margin: 0.66rem 0;
+              font-size: 1rem;
+            }
+            a {
+              color: #0075ff;
+              text-decoration: none;
+            }
+            a:hover {
+              text-decoration: underline;
             }
             .highlight {
-              color: #FF6601;
-              font-weight: bold;
+              color: #ff6601;
+              font-weight: 500;
             }
-            .button {
-              display: inline-block;
-              background-color: #FF6601;
-              color: white;
-              text-decoration: none;
-              padding: 10px 20px;
-              border-radius: 5px;
-              font-weight: bold;
-              margin: 15px 0;
+            .signature {
+              margin-top: 1.5rem;
+              margin-bottom: 0.5rem;
             }
-            .schools {
+            .schools-list {
               text-align: center;
-              margin: 20px 0;
-              padding: 15px;
+              margin: 1.5rem 0;
+              padding: 0.5rem;
               background-color: #f5f5f5;
-              border-radius: 5px;
+              border-radius: 4px;
+              font-size: 0.95rem;
             }
-            .schools a {
-              color: #FF6601;
-              text-decoration: none;
-              padding: 0 8px;
-            }
-            .schools a:hover {
-              text-decoration: underline;
+            @media (max-width: 600px) {
+              .container {
+                padding: 1rem 0.7rem;
+              }
+              h2 {
+                font-size: 1.3rem;
+              }
             }
           </style>
         </head>
         <body>
           <div class="container">
-            <div class="header">
-              <h1>Welcome to <span class="highlight">Linkd</span>!</h1>
-            </div>
+            <h2>Thanks for your interest in <span class="highlight">Linkd</span>, ${firstName}!</h2>
             
-            <p>Hi ${userName},</p>
+            <p>We've received your request to bring Linkd to ${schoolName}. We'll keep you updated on our progress.</p>
             
-            <p>Thank you for joining the Linkd waitlist! We're excited to have you on board.</p>
+            <p>In the meantime, check out our latest release at <a href="https://stanford.uselinkd.com/" target="_blank">Stanford</a> and try searching for anything that interests you.</p>
             
-            <p>We've registered your interest in bringing Linkd to <strong>${schoolName}</strong>. We'll keep you updated on our progress and let you know as soon as we're ready to launch at your school.</p>
+            <p>Our search algorithm is designed to help you discover people through shared experiences - we'd love to hear what you think! Please feel free to reply to this email with feedback.</p>
             
-            <p>In the meantime, feel free to check out our existing school communities:</p>
-            
-            <div class="schools">
+            <div class="schools-list">
               <a href="https://upenn-frontend-production.up.railway.app/">UPenn</a> | 
               <a href="https://utoronto.uselinkd.com/">UToronto</a> | 
               <a href="https://stanford.uselinkd.com/">Stanford</a> | 
@@ -224,22 +211,20 @@ app.post('/api/waitlist', async (req, res) => {
               <a href="https://yale.uselinkd.com/">Yale</a>
             </div>
             
-            <p>If you have any questions or feedback, please don't hesitate to reach out to us at <a href="mailto:founders@linkd.inc">founders@linkd.inc</a>.</p>
+            <p class="signature">- Eric & Tom</p>
             
-            <p>Best regards,<br>Eric & Tom<br>Linkd Team</p>
-            
-            <div class="footer">
-              <p>This email was sent to ${userEmail} because you signed up for the Linkd waitlist.</p>
-            </div>
+            <p style="font-size: 0.8rem; color: #666; margin-top: 1.5rem; border-top: 1px solid #eee; padding-top: 1rem;">
+              This email was sent to ${userEmail} because you signed up for the Linkd waitlist.
+            </p>
           </div>
         </body>
         </html>
       `;
       
       const emailData = await resend.emails.send({
-        from: 'Linkd Waitlist <founder@waitlist.linkd.inc>',
+        from: 'Linkd <founders@waitlist.linkd.inc>',
         to: userEmail,
-        subject: `Welcome to Linkd's Waitlist, ${userName}!`,
+        subject: `Your request for ${schoolName}`,
         html: emailHtml,
       });
       
@@ -360,6 +345,7 @@ app.post('/api/test/send-email', async (req, res) => {
     console.log('TEST: Attempting to send test email to', email);
     
     const userName = name || 'Test User';
+    const firstName = name ? name.split(' ')[0] : 'there';
     const schoolName = school || 'Test University';
     
     // Create test email HTML content
@@ -368,23 +354,91 @@ app.post('/api/test/send-email', async (req, res) => {
       <html>
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Test Email from Linkd</title>
         <style>
-          body { font-family: sans-serif; }
+          body {
+            font-family: 'Inconsolata', monospace;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #1a1a1a;
+            line-height: 1.5;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1.5rem 0.8rem;
+          }
           .test-banner { 
             background-color: #ffeb3b; 
             padding: 10px; 
             text-align: center;
             margin-bottom: 20px;
+            border-radius: 4px;
+            font-weight: bold;
+          }
+          h2 {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin: 0 0 1rem 0;
+            color: #000;
+          }
+          p {
+            margin: 0.66rem 0;
+            font-size: 1rem;
+          }
+          a {
+            color: #0075ff;
+            text-decoration: none;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+          .highlight {
+            color: #ff6601;
+            font-weight: 500;
+          }
+          .signature {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+          }
+          .schools-list {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 0.5rem;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 0.95rem;
           }
         </style>
       </head>
       <body>
-        <div class="test-banner">TEST EMAIL - PLEASE IGNORE</div>
-        <p>Hello ${userName},</p>
-        <p>This is a test email from Linkd for ${schoolName}.</p>
-        <p>If you're seeing this, the email functionality is working correctly!</p>
-        <p>Test completed at: ${new Date().toISOString()}</p>
+        <div class="container">
+          <div class="test-banner">TEST EMAIL - PLEASE IGNORE</div>
+          
+          <h2>Thanks for your interest in <span class="highlight">Linkd</span>, ${firstName}!</h2>
+          
+          <p>We've received your request to bring Linkd to ${schoolName}. We'll keep you updated on our progress.</p>
+          
+          <p>In the meantime, check out our latest release at <a href="https://stanford.uselinkd.com/" target="_blank">Stanford</a> and try searching for anything that interests you.</p>
+          
+          <p>Our search algorithm is designed to help you discover people through shared experiences - we'd love to hear what you think! Please feel free to reply to this email with feedback.</p>
+          
+          <div class="schools-list">
+            <a href="https://upenn-frontend-production.up.railway.app/">UPenn</a> | 
+            <a href="https://utoronto.uselinkd.com/">UToronto</a> | 
+            <a href="https://stanford.uselinkd.com/">Stanford</a> | 
+            <a href="https://columbia.uselinkd.com/">Columbia</a> | 
+            <a href="https://yale.uselinkd.com/">Yale</a>
+          </div>
+          
+          <p class="signature">- Eric & Tom</p>
+          
+          <p style="font-size: 0.8rem; color: #666; margin-top: 1.5rem;">
+            Test completed at: ${new Date().toISOString()}
+          </p>
+        </div>
       </body>
       </html>
     `;
@@ -392,7 +446,7 @@ app.post('/api/test/send-email', async (req, res) => {
     const emailData = await resend.emails.send({
       from: 'Linkd Test <founders@waitlist.linkd.inc>',
       to: email,
-      subject: `Linkd Test Email`,
+      subject: `Your request for ${schoolName}`,
       html: emailHtml,
     });
     
