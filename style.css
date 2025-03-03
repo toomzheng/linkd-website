@@ -227,3 +227,52 @@ a:hover {
         gap: 5px;
     }
 }
+
+/* School colors */
+.school-upenn {
+    background: linear-gradient(to right, #990000 50%, #011F5B 50%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+    text-decoration-color: #990000; /* Ensure underline is visible */
+}
+
+.school-upenn u {
+    text-decoration: underline;
+    text-decoration-color: inherit;
+}
+
+.school-utoronto {
+    color: #013482; /* Dark blue */
+    font-weight: 600;
+}
+
+.school-stanford {
+    color: #8C1515; /* Cardinal red */
+    font-weight: 600;
+}
+
+.school-columbia {
+    color: #75AADB; /* Light blue */
+    font-weight: 600;
+}
+
+.school-yale {
+    color: #254d94; /* Yale blue */
+    font-weight: 600;
+}
+
+.school-berkeley {
+    background: linear-gradient(to right, #003262 50%, #FDB515 50%); /* Blue and Gold */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+    text-decoration-color: #003262; /* Ensure underline is visible */
+}
+
+.school-berkeley u {
+    text-decoration: underline;
+    text-decoration-color: inherit;
+}
