@@ -96,12 +96,12 @@
                 
                 try {
                     await navigator.clipboard.writeText(email);
-                    const originalText = this.textContent;
+                    const originalHTML = this.innerHTML;
                     this.textContent = 'Copied!';
                     if (timeoutId) clearTimeout(timeoutId);
                     timeoutId = setTimeout(() => {
-                        this.textContent = originalText;
-                    },);
+                        this.innerHTML = originalHTML;
+                    }, 666);
                 } catch (err) {
                     console.error('Failed to copy:', err);
                 }
