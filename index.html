@@ -57,7 +57,7 @@
             </div>
 
             <div class="signup-section">
-                <p>Let us know if you'd like this at your school:</p>
+                <p>Want this at you school? The school with the most sign-ups in the next three days is up next!</p>
                 <form class="signup-form" id="signupForm">
                     <div class="form-row">
                         <input type="text" id="name" name="name" placeholder="Full name" required>
@@ -138,7 +138,7 @@
          ******************************************/
         
         // Rate limiting functionality
-        const RATE_LIMIT = 14; // max submissions per hour
+        const RATE_LIMIT = 1; // max submissions per hour
         const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
         
         function checkRateLimit() {
