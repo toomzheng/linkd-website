@@ -97,7 +97,7 @@
                 try {
                     await navigator.clipboard.writeText(email);
                     const originalHTML = this.innerHTML;
-                    this.textContent = 'Copied!';
+                    this.textContent = 'copied!';
                     if (timeoutId) clearTimeout(timeoutId);
                     timeoutId = setTimeout(() => {
                         this.innerHTML = originalHTML;
