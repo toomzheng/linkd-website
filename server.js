@@ -18,7 +18,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Setup middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '.'), {
-  maxAge: '1d', // Cache static assets for 1 day
+  maxAge: '4h', // Cache static assets for 4 hours
   etag: true,   // Enable ETags for cache validation
   lastModified: true
 }));
@@ -32,6 +32,13 @@ app.use((req, res, next) => {
       res.status(503).send('Service temporarily unavailable. Please try again later.');
     }
   });
+  next();
+});
+
+// Add cache control middleware
+app.use((req, res, next) => {
+  // Set Cache-Control header for all responses
+  res.setHeader('Cache-Control', 'public, max-age=14400'); // 12 hours in seconds
   next();
 });
 
