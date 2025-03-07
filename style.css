@@ -141,6 +141,19 @@ p:has(.copy-email) {
     margin: 0;
 }
 
+.schools-list a {
+    text-decoration: none;
+    transition: font-weight 0.15s ease;
+}
+
+.schools-list a:hover {
+    font-weight: 600;
+}
+
+.schools-list span {
+    color: inherit;
+}
+
 .signup-section {
     margin-top: 0.85rem;
     padding: 0;
