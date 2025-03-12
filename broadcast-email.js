@@ -11,8 +11,9 @@ const supabase = createClient(
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Configuration
-const DRY_RUN = false; // Set to false when ready to actually send
-const SCHEDULED_HOURS = 9.5; // Schedule for 24 hours from now
+const DRY_RUN = false; // Set to false to actually send
+const BATCH_SIZE = 5; // Reduced from 50 to 5 emails per batch
+const DELAY_SECONDS = 2; // Delay between batches in seconds
 
 async function scheduleWaitlistBroadcast() {
   try {
@@ -147,34 +148,10 @@ async function scheduleWaitlistBroadcast() {
       </html>
     `;
     
-    // 4. Set the scheduled time
-    const scheduledTime = new Date(Date.now() + SCHEDULED_HOURS * 60 * 60 * 1000).toISOString();
-    console.log(`Email would be scheduled for: ${scheduledTime}`);
-    
-    if (DRY_RUN) {
-      // In dry run mode, just log what would happen
-      console.log(`DRY RUN: Would send to ${recipients.length} recipients`);
-      console.log('First 3 recipients:');
-      console.log(JSON.stringify(recipients.slice(0, 3), null, 2));
-      
-      // Preview the template with the first recipient's data
-      if (recipients.length > 0) {
-        console.log('\nEmail preview for first recipient:');
-        const firstRecipient = recipients[0];
-        console.log(`- Email: ${firstRecipient.email}`);
-        console.log(`- Name: ${firstRecipient.data.name}`);
-        console.log(`- School: ${firstRecipient.data.school}`);
-      }
-      
-      console.log('\nTo test with actual email previews, run the test-broadcast.js script');
-      return { success: true, message: 'Dry run completed' };
-    }
-    
-    // 5. Schedule the broadcast email (only runs when DRY_RUN is false)
-    console.log('Scheduling broadcast email...');
+    // 4. Send emails immediately in small batches
+    console.log('Sending emails immediately...');
     
     // For large lists, we need to send in batches
-    const BATCH_SIZE = 50; // Resend recommends smaller batches
     const totalRecipients = recipients.length;
     let successCount = 0;
     let errorCount = 0;
@@ -195,8 +172,8 @@ async function scheduleWaitlistBroadcast() {
             subject: "Linkd Update: We've Launched at UC Berkeley!",
             html: htmlTemplate.replace(/\{\{data\.firstName\}\}/g, recipient.data.firstName)
                              .replace(/\{\{data\.school\}\}/g, recipient.data.school)
-                             .replace(/\{\{email\}\}/g, recipient.email),
-            scheduled_for: scheduledTime
+                             .replace(/\{\{email\}\}/g, recipient.email)
+            // No scheduled_for parameter - send immediately
           });
         });
         
@@ -204,12 +181,13 @@ async function scheduleWaitlistBroadcast() {
         const results = await Promise.allSettled(promises);
         
         // Count successes and failures
-        results.forEach(result => {
+        results.forEach((result, idx) => {
           if (result.status === 'fulfilled') {
             successCount++;
+            console.log(`✓ Email sent to: ${batch[idx].email}`);
           } else {
             errorCount++;
-            console.error('Error sending to a recipient:', result.reason);
+            console.error(`✗ Error sending to ${batch[idx].email}:`, result.reason);
           }
         });
         
@@ -217,8 +195,8 @@ async function scheduleWaitlistBroadcast() {
         
         // Add a small delay between batches to avoid rate limits
         if (i + BATCH_SIZE < totalRecipients) {
-          console.log('Waiting 2 seconds before next batch...');
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          console.log(`Waiting ${DELAY_SECONDS} seconds before next batch...`);
+          await new Promise(resolve => setTimeout(resolve, DELAY_SECONDS * 1000));
         }
       } catch (batchError) {
         console.error(`Error processing batch ${Math.floor(i/BATCH_SIZE) + 1}:`, batchError);
@@ -226,10 +204,10 @@ async function scheduleWaitlistBroadcast() {
       }
     }
     
-    console.log(`Email scheduling completed. Success: ${successCount}, Errors: ${errorCount}`);
+    console.log(`Email sending completed. Success: ${successCount}, Errors: ${errorCount}`);
     
     if (errorCount > 0) {
-      console.warn(`Warning: ${errorCount} emails failed to schedule.`);
+      console.warn(`Warning: ${errorCount} emails failed to send.`);
     }
     
     return { 
@@ -240,7 +218,7 @@ async function scheduleWaitlistBroadcast() {
     };
     
   } catch (error) {
-    console.error('Error scheduling broadcast:', error);
+    console.error('Error sending broadcast:', error);
     return { success: false, error: error.message };
   }
 }
