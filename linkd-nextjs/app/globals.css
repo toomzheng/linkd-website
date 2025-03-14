@@ -7,11 +7,7 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-/* Font display strategy to prevent FOUT */
-@font-face {
-  font-family: 'Inconsolata';
-  font-display: block;
-}
+/* Next.js handles font loading */
 
 :root {
   --background: #ffffff;
@@ -22,10 +18,7 @@ html {
   --highlight-cory: #246BFF;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
+/* Variables are already defined in :root */
 
 body {
   background: #ffffff !important;
