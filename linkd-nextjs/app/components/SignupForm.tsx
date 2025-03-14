@@ -104,7 +104,7 @@ const SignupForm = () => {
 
   return (
     <div className="signup-section mt-[0.85rem] mb-[1.75rem]">
-      <p><b>Want this at your school?</b> The school with the most sign-ups is next. UCLA is in the lead</p>
+      <p className="font-medium"><b>Want this at your school?</b> Most signups is next and UCLA is in the lead.</p>
       <form className="signup-form flex flex-col gap-[5px] mt-[0.6rem]" onSubmit={handleSubmit}>
         <div className="form-row flex gap-[6px] sm:flex-row flex-col">
           <input 

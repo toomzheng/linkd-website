@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="container max-w-[650px] mx-auto p-[1.5rem_0.8rem_0.5rem]">
+    <div className="container max-w-[700px] mx-auto p-[2rem_0.8rem_0.5rem]">
       <main>
         <h1 className="flex items-center gap-2">
           <Image 
@@ -62,7 +62,7 @@ export default function Home() {
         </p>
         
         <p className="mb-[0.5rem] font-medium">
-          business and general inquiries: <CopyEmail email="founders@linkd.inc"><b>founders@linkd.inc</b></CopyEmail>
+          business & general: <CopyEmail email="founders@linkd.inc"><b>founders@linkd.inc</b></CopyEmail>
         </p>
         
         <InvestorLink />
