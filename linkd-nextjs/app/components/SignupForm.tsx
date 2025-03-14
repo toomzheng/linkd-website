@@ -38,7 +38,7 @@ const SignupForm = () => {
         
         return {
           allowed: false,
-          message: `Rate limit reached. Please try again in about ${minutesUntilReset} minute${minutesUntilReset > 1 ? 's' : ''}.`
+          message: `You already signed up! Please try again in about ${minutesUntilReset} minute${minutesUntilReset > 1 ? 's' : ''}.`
         };
       }
       
@@ -157,7 +157,12 @@ const SignupForm = () => {
           Submit Request
         </button>
       </form>
-      <p className={`form-message mt-[0.4rem] text-[0.85rem] font-medium ${messageType === 'success' ? 'text-[#2e7d32] text-[0.83rem]' : ''} ${messageType === 'error' ? 'text-[#c62828]' : ''}`}>
+      <p 
+        className={`form-message mt-[0.4rem] text-[0.85rem] font-medium`}
+        style={{
+          color: messageType === 'success' ? '#15803d' : messageType === 'error' ? '#b91c1c' : 'inherit'
+        }}
+      >
         {message}
       </p>
     </div>
