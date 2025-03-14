@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Font optimization */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Font display strategy to prevent FOUT */
+@font-face {
+  font-family: 'Inconsolata';
+  font-display: block;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #1a1a1a;

@@ -6,8 +6,10 @@ import Script from "next/script";
 const inconsolata = Inconsolata({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
+  display: "block",
   variable: "--font-inconsolata",
+  preload: true,
+  fallback: ["monospace"],
 });
 
 export const metadata: Metadata = {
@@ -52,6 +54,15 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         <meta name="theme-color" content="#ffffff" />
+        
+        {/* Font preloading to prevent flash */}
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700;800&display=swap"
+          as="style"
+          crossOrigin="anonymous"
+        />
+        
         <Script
           id="organization-schema"
           type="application/ld+json"
