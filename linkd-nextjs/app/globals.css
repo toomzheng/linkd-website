@@ -15,7 +15,7 @@ html {
 
 :root {
   --background: #ffffff;
-  --foreground: #1a1a1a;
+  --foreground: #000000;
   --font-family: var(--font-inconsolata), monospace;
   --link-color: #0075ff;
   --highlight-yc: #ff6601;
