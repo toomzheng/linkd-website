@@ -2,17 +2,18 @@ import SchoolsList from './components/SchoolsList';
 import SignupForm from './components/SignupForm';
 import CopyEmail from './components/CopyEmail';
 import InvestorLink from './components/InvestorLink';
+import Image from 'next/image';
 
 export default function Home() {
   return (
     <div className="container max-w-[650px] mx-auto p-[1.5rem_0.8rem_0.5rem]">
       <main>
         <h1 className="flex items-center gap-2">
-          <img 
+          <Image 
             src="/favicon.ico" 
             alt="Linkd Logo" 
-            width="28" 
-            height="28" 
+            width={28} 
+            height={28} 
             className="inline-block" 
           />
           Linkd Inc.<span className="blinking-cursor">_</span>
@@ -38,18 +39,18 @@ export default function Home() {
         
         <h2>How do you discover people?</h2>
         
-        <p className="font-medium">We're here to find out.</p>
+        <p className="font-medium">We&apos;re here to find out.</p>
         
-        <p className="font-medium">Our team is building the world's first search algorithm designed around human interactions. Social networks should be centered on our <em>experiences</em>.</p>
+        <p className="font-medium">Our team is building the world&apos;s first search algorithm designed around human interactions. Social networks should be centered on our <em>experiences</em>.</p>
         
-        <p className="font-medium">It's called <b>Linkd.</b></p>
+        <p className="font-medium">It&apos;s called <b>Linkd.</b></p>
 
         <p className="announcement font-medium">
-          <em>&gt; If you're a <u>company</u> interested in people search for social platforms, recruiting, or leads, please directly contact us below.</em>
+          <em>&gt; If you&apos;re a <u>company</u> interested in people search for social platforms, recruiting, or leads, please directly contact us below.</em>
         </p>
         
         <h2>About alumni.</h2>
-        <p className="font-medium">We've began experimenting with this new medium by working with one of the most powerful forms of connections: <b>Alumni Networks.</b> Begin by searching for people who've experienced your education.</p>
+        <p className="font-medium">We&apos;ve began experimenting with this new medium by working with one of the most powerful forms of connections: <b>Alumni Networks.</b> Begin by searching for people who&apos;ve experienced your education.</p>
         <p className="font-medium">Links to try out our current beta schools:</p>
         
         <SchoolsList />

@@ -18,9 +18,30 @@ const timeoutPromise = (ms: number, message: string) => {
   });
 };
 
+// Define types for database responses
+type WaitlistEntry = {
+  email: string;
+  name?: string;
+  school?: string;
+  created_at?: Date;
+};
+
+type DatabaseError = {
+  message: string;
+  details?: string;
+  hint?: string;
+  code?: string;
+};
+
+type SupabaseQueryResult = {
+  data: WaitlistEntry[] | null;
+  error: DatabaseError | null;
+};
+
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, school, linkedin } = await request.json();
+    // Destructure what we need from the request
+    const { email, name, school } = await request.json();
 
     // Validate input
     if (!email) {
@@ -34,7 +55,7 @@ export async function POST(request: NextRequest) {
     const result = await Promise.race([
       supabase.from('waitlist').select('*').eq('email', baseEmail),
       timeoutPromise(5000, 'Database query timed out')
-    ]);
+    ]) as SupabaseQueryResult;
 
     let emailToInsert = email;
     let modified = false;
@@ -45,12 +66,12 @@ export async function POST(request: NextRequest) {
       const similarEmailsResult = await Promise.race([
         supabase.from('waitlist').select('email').like('email', `${baseEmail}|%`),
         timeoutPromise(5000, 'Similar emails query timed out')
-      ]);
+      ]) as SupabaseQueryResult;
       
       let maxNum = 0;
       if (similarEmailsResult.data && similarEmailsResult.data.length > 0) {
         // Find the highest number suffix used so far
-        similarEmailsResult.data.forEach((entry: any) => {
+        similarEmailsResult.data.forEach((entry: WaitlistEntry) => {
           const parts = entry.email.split('|');
           if (parts.length > 1) {
             const num = parseInt(parts[1], 10);
@@ -75,7 +96,7 @@ export async function POST(request: NextRequest) {
         created_at: new Date() 
       }]),
       timeoutPromise(5000, 'Database insert timed out')
-    ]);
+    ]) as { error: DatabaseError | null };
 
     // If there was an error with the insert
     if (insertResult.error) {
@@ -85,7 +106,6 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email via Resend
     try {
-      const userName = name || 'there';
       const firstName = name ? name.split(' ')[0] : 'there';
       const userEmail = baseEmail; // Use the original email without any suffix
       const schoolName = school || 'your school';
@@ -193,14 +213,15 @@ export async function POST(request: NextRequest) {
         </html>
       `;
       
-      const emailData = await resend.emails.send({
+      await resend.emails.send({
         from: 'Linkd <founders@waitlist.linkd.inc>',
         to: userEmail,
         subject: `Thanks for your interest in Linkd for ${schoolName}, ${firstName}!`,
         html: emailHtml,
       });
       
-      console.log('Confirmation email sent:', emailData.id);
+      // Log that the email was sent successfully
+      console.log('Confirmation email sent successfully');
     } catch (emailError) {
       // Don't fail the registration if email sending fails
       console.error('Failed to send confirmation email:', emailError);

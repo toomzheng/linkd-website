@@ -30,7 +30,7 @@ const SignupForm = () => {
       submissions = submissions.filter((timestamp: number) => now - timestamp < RATE_LIMIT_WINDOW);
       
       // Check if user has exceeded limit
-      const RATE_LIMIT = 100; // max submissions per hour
+      const RATE_LIMIT = 1; // max submissions per hour
       if (submissions.length >= RATE_LIMIT) {
         const oldestSubmission = submissions[0];
         const resetTime = new Date(oldestSubmission + RATE_LIMIT_WINDOW);
