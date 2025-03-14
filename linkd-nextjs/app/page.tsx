@@ -9,13 +9,16 @@ export default function Home() {
     <div className="container max-w-[700px] mx-auto p-[2rem_0.8rem_0.5rem]">
       <main>
         <h1 className="flex items-center gap-2">
-          <Image 
-            src="/favicon.ico" 
-            alt="Linkd Logo" 
-            width={28} 
-            height={28} 
-            className="inline-block" 
-          />
+          <div className="w-[28px] h-[28px] relative">
+            <Image 
+              src="/favicon.ico" 
+              alt="Linkd Logo" 
+              fill
+              sizes="28px"
+              priority
+              className="object-contain" 
+            />
+          </div>
           Linkd Inc.<span className="blinking-cursor">_</span>
         </h1>
         <div className="flex justify-between items-center mt-[0.4rem] mb-[-0.5rem]">
