@@ -29,7 +29,7 @@ html {
 
 body {
   background: #ffffff !important;
-  color: #1a1a1a !important;
+  color: #000000 !important;
   font-family: var(--font-family);
   line-height: 1.5;
   margin: 0;
@@ -40,20 +40,20 @@ h1 {
   font-weight: 600;
   font-size: 1.8rem;
   margin: 0 0 0.4rem 0;
-  color: #000;
+  color: #000000;
 }
 
 h2 {
   font-weight: 600;
   font-size: 1.2rem;
   margin: 1.30rem 0 0.4rem 0;
-  color: #000;
+  color: #000000;
 }
 
 p {
   margin: 0.52rem 0;
   font-size: 1rem;
-  color: #1a1a1a;
+  color: #000000;
 }
 
 a {
