@@ -61,7 +61,7 @@ export default function Home() {
         <SignupForm />
         
         <p className="signature mb-[1.4rem] mt-[0.6rem] font-medium">
-          - <a href="https://www.linkedin.com/in/eric-mao/" target="_blank" rel="noopener noreferrer" className="name-link hover:opacity-70"><b>Eric</b></a> &amp; <a href="https://www.linkedin.com/in/toomzheng/" target="_blank" rel="noopener noreferrer" className="name-link hover:opacity-70"><b>Tom</b></a>
+          - <a href="https://www.linkedin.com/in/eric-mao/" target="_blank" rel="noopener noreferrer" className="name-link hover:opacity-70"><b>Eric</b></a> &amp; <a href="https://tomzheng.dev" target="_blank" rel="noopener noreferrer" className="name-link hover:opacity-70"><b>Tom</b></a>
         </p>
         
         <p className="mb-[0.5rem] font-medium">
