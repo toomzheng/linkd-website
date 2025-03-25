@@ -1,7 +1,26 @@
 import type { Metadata } from "next";
 import { Inconsolata } from "next/font/google";
+import localFont from 'next/font/local';
 import "./globals.css";
 import Script from "next/script";
+
+const redaction = localFont({
+  src: [
+    {
+      path: './fonts/Redaction-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Redaction-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    }
+  ],
+  variable: '--font-redaction',
+  display: 'block',
+  preload: true,
+});
 
 const inconsolata = Inconsolata({
   subsets: ["latin"],
@@ -87,7 +106,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inconsolata.className} ${inconsolata.variable} antialiased`}>
+      <body className={`${inconsolata.className} ${inconsolata.variable} ${redaction.variable} antialiased`}>
         {children}
       </body>
     </html>

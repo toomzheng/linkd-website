@@ -30,14 +30,16 @@ body {
 }
 
 h1 {
-  font-weight: 600;
+  font-family: var(--font-redaction);
+  font-weight: 700;
   font-size: 1.8rem;
   margin: 0 0 0.4rem 0;
   color: #000000;
 }
 
 h2 {
-  font-weight: 600;
+  font-family: var(--font-redaction);
+  font-weight: 700;
   font-size: 1.2rem;
   margin: 1.30rem 0 0.4rem 0;
   color: #000000;
