@@ -137,8 +137,6 @@ async function scheduleWaitlistBroadcast() {
           <p class="signature">- <a href="https://www.linkedin.com/in/eric-mao/" target="_blank" rel="noopener noreferrer">Eric</a> & 
               <a href="https://www.linkedin.com/in/toomzheng/" target="_blank" rel="noopener noreferrer">Tom</a></p>
           
-          <p>Special thanks to <a href="https://corylevy.com/" target="_blank" rel="noopener noreferrer" class="cory"><u><b>Cory Levy</b></u></a> and the Z Fellows team!</p>
-          
           <p class="footer-text">
             This email was sent to {{email}} because you signed up for the Linkd waitlist.
             <br><a href="https://uselinkd.com/unsubscribe?email={{email}}" target="_blank">Unsubscribe</a>
