@@ -10,7 +10,7 @@ export default function TermsOfService() {
       <div className="space-y-6">
         <section>
           <h2 className="text-xl font-semibold mb-2">1. Acceptance of Terms</h2>
-          <p className="mb-3">Welcome to Sentinel. By accessing or using our service, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to all of these Terms, you may not access or use our services.</p>
+          <p className="mb-3">Welcome to Sentinel. By accessing or using our service, you agree to be bound by these Terms of Service (&ldquo;Terms&rdquo;). If you do not agree to all of these Terms, you may not access or use our services.</p>
           <p>We may update these Terms from time to time. Your continued use of Sentinel after any changes to the Terms constitutes your acceptance of the revised Terms.</p>
         </section>
 
@@ -66,7 +66,7 @@ export default function TermsOfService() {
 
         <section>
           <h2 className="text-xl font-semibold mb-2">7. Disclaimer of Warranties</h2>
-          <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis, without warranties of any kind, either express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.</p>
+          <p>The Service is provided on an &ldquo;AS IS&rdquo; and &ldquo;AS AVAILABLE&rdquo; basis, without warranties of any kind, either express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.</p>
         </section>
 
         <section>

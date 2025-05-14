@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
       <div className="space-y-6">
         <section>
           <h2 className="text-xl font-semibold mb-2">1. Introduction</h2>
-          <p className="mb-3">Welcome to Sentinel ("we," "our," or "us"). We are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service.</p>
+          <p className="mb-3">Welcome to Sentinel (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;). We are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service.</p>
           <p>By accessing or using Sentinel, you consent to the practices described in this Privacy Policy.</p>
         </section>
 
