@@ -70,6 +70,10 @@ export default function Home() {
         
         <InvestorLink />
       </main>
+      
+      <div className="text-center py-4 text-sm text-gray-600 fixed bottom-0 left-0 right-0 bg-white">
+        <a href="/privacy-policy" className="text-black hover:underline" style={{color: 'black'}}>Privacy Policy</a> | <a href="/terms-of-service" className="text-black hover:underline" style={{color: 'black'}}>Terms of Service</a>
+      </div>
     </div>
   );
 }
